@@ -1,0 +1,73 @@
+{
+  "page": {
+    "width": 10,
+    "height": 7,
+    "title": "节点微调与零转折排线验证",
+    "diagramType": "flowchart"
+  },
+  "nodes": [
+    {
+      "id": "a",
+      "kind": "box",
+      "text": "组件 A",
+      "x": 0.7,
+      "y": 1.5,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "id": "b",
+      "kind": "box",
+      "text": "组件 B",
+      "x": 7.1,
+      "y": 3,
+      "w": 2,
+      "h": 2.8
+    }
+  ],
+  "routingGroups": {
+    "parallel": {
+      "axis": "vertical",
+      "center": 5,
+      "spacing": 0.35,
+      "optimizeLayout": {
+        "moveNode": "b",
+        "maxShift": 1.4
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "a",
+      "to": "b",
+      "fromPort": "right",
+      "toPort": "left",
+      "routeGroup": "parallel",
+      "text": "1"
+    },
+    {
+      "from": "a",
+      "to": "b",
+      "fromPort": "right",
+      "toPort": "left",
+      "routeGroup": "parallel",
+      "text": "2"
+    },
+    {
+      "from": "a",
+      "to": "b",
+      "fromPort": "right",
+      "toPort": "left",
+      "routeGroup": "parallel",
+      "text": "3"
+    },
+    {
+      "from": "a",
+      "to": "b",
+      "fromPort": "right",
+      "toPort": "left",
+      "routeGroup": "parallel",
+      "text": "4"
+    }
+  ]
+}

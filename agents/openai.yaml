@@ -1,0 +1,4 @@
+interface:
+  display_name: "Visio 技术方案制图"
+  short_description: "依据个人图例风格生成可编辑的中文 Visio 架构、功能和接口图并检查预览"
+  default_prompt: "使用 $visio-diagrams 将我的技术需求整理为可编辑的 Visio 图，并生成预览。"

@@ -1,0 +1,286 @@
+{
+  "page": {
+    "width": 10.2,
+    "height": 14.6,
+    "title": "发布流程两列折排与自动排线",
+    "colorFill": true,
+    "diagramType": "flowchart"
+  },
+  "nodes": [
+    {
+      "id": "start",
+      "text": "开始",
+      "x": 3.6,
+      "y": 0.85,
+      "w": 2.8,
+      "h": 0.5,
+      "kind": "terminator",
+      "fill": "#BDD7EE"
+    },
+    {
+      "id": "request",
+      "text": "提交发布申请",
+      "x": 3.6,
+      "y": 1.75,
+      "w": 2.8,
+      "h": 0.6,
+      "kind": "box",
+      "fill": "#FFFFFF"
+    },
+    {
+      "id": "prepare",
+      "text": "准备版本与部署清单",
+      "x": 3.6,
+      "y": 2.75,
+      "w": 2.8,
+      "h": 0.6,
+      "kind": "box",
+      "fill": "#FFFFFF"
+    },
+    {
+      "id": "check",
+      "text": "执行自动化检查",
+      "x": 3.6,
+      "y": 3.75,
+      "w": 2.8,
+      "h": 0.6,
+      "kind": "box",
+      "fill": "#FFFFFF"
+    },
+    {
+      "id": "gate",
+      "text": "检查通过？",
+      "x": 3.5,
+      "y": 4.85,
+      "w": 3,
+      "h": 1.2,
+      "kind": "diamond",
+      "fill": "#FEE599"
+    },
+    {
+      "id": "fix",
+      "text": "修复问题并更新版本",
+      "x": 0.3,
+      "y": 5.15,
+      "w": 2.5,
+      "h": 0.6,
+      "kind": "box",
+      "fill": "#F7CBAC"
+    },
+    {
+      "id": "backup",
+      "text": "备份当前版本与配置",
+      "x": 3.6,
+      "y": 6.6,
+      "w": 2.8,
+      "h": 0.6,
+      "kind": "box",
+      "fill": "#FFFFFF"
+    },
+    {
+      "id": "deploy",
+      "text": "部署到验证环境",
+      "x": 3.6,
+      "y": 7.6,
+      "w": 2.8,
+      "h": 0.6,
+      "kind": "box",
+      "fill": "#FFFFFF"
+    },
+    {
+      "id": "verify",
+      "text": "执行冒烟与业务验证",
+      "x": 3.6,
+      "y": 8.6,
+      "w": 2.8,
+      "h": 0.6,
+      "kind": "box",
+      "fill": "#FFFFFF"
+    },
+    {
+      "id": "accept",
+      "text": "验证通过？",
+      "x": 3.5,
+      "y": 9.7,
+      "w": 3,
+      "h": 1.2,
+      "kind": "diamond",
+      "fill": "#FEE599"
+    },
+    {
+      "id": "rollback",
+      "text": "回退版本并分析原因",
+      "x": 7.3,
+      "y": 10,
+      "w": 2.5,
+      "h": 0.6,
+      "kind": "box",
+      "fill": "#F7CBAC"
+    },
+    {
+      "id": "release",
+      "text": "发布正式版本",
+      "x": 3.6,
+      "y": 11.5,
+      "w": 2.8,
+      "h": 0.6,
+      "kind": "box",
+      "fill": "#D7E3BF"
+    },
+    {
+      "id": "observe",
+      "text": "观察运行状态并归档",
+      "x": 3.6,
+      "y": 12.5,
+      "w": 2.8,
+      "h": 0.6,
+      "kind": "box",
+      "fill": "#FFFFFF"
+    },
+    {
+      "id": "end",
+      "text": "结束",
+      "x": 3.6,
+      "y": 13.5,
+      "w": 2.8,
+      "h": 0.5,
+      "kind": "terminator",
+      "fill": "#BDD7EE"
+    }
+  ],
+  "edges": [
+    {
+      "to": "request",
+      "text": "",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "from": "start"
+    },
+    {
+      "to": "prepare",
+      "text": "",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "from": "request"
+    },
+    {
+      "to": "check",
+      "text": "",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "from": "prepare"
+    },
+    {
+      "to": "gate",
+      "text": "",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "from": "check"
+    },
+    {
+      "to": "deploy",
+      "text": "",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "from": "backup"
+    },
+    {
+      "to": "verify",
+      "text": "",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "from": "deploy"
+    },
+    {
+      "to": "accept",
+      "text": "",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "from": "verify"
+    },
+    {
+      "to": "observe",
+      "text": "",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "from": "release"
+    },
+    {
+      "to": "end",
+      "text": "",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "from": "observe"
+    },
+    {
+      "to": "backup",
+      "text": "是",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "from": "gate"
+    },
+    {
+      "to": "fix",
+      "text": "否",
+      "fromPort": "left",
+      "toPort": "right",
+      "from": "gate"
+    },
+    {
+      "to": "check",
+      "text": "重新检查",
+      "fromPort": "top",
+      "toPort": "left",
+      "from": "fix"
+    },
+    {
+      "to": "release",
+      "text": "是",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "from": "accept"
+    },
+    {
+      "to": "rollback",
+      "text": "否",
+      "fromPort": "right",
+      "toPort": "left",
+      "from": "accept"
+    },
+    {
+      "to": "prepare",
+      "text": "修订后重试",
+      "fromPort": "top",
+      "toPort": "right",
+      "from": "rollback"
+    }
+  ],
+  "localLayout": {
+    "fold": {
+      "mainPath": [
+        "start",
+        "request",
+        "prepare",
+        "check",
+        "gate",
+        "backup",
+        "deploy",
+        "verify",
+        "accept",
+        "release",
+        "observe",
+        "end"
+      ],
+      "branchAnchors": {
+        "fix": "gate",
+        "rollback": "accept"
+      },
+      "firstCenter": 5,
+      "columnPitch": 7,
+      "rowGap": 0.5
+    },
+    "routing": {
+      "maxStates": 150000
+    }
+  }
+}

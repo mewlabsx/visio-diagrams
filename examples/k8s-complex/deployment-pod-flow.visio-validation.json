@@ -1,0 +1,29 @@
+{
+  "vsdx": "deployment-pod-flow.vsdx",
+  "planned": "deployment-pod-flow.planned.json",
+  "status": "PASS",
+  "openMs": 714,
+  "pageWidth": 22.5,
+  "pageHeight": 15.2,
+  "shapes": 78,
+  "connects": 56,
+  "shapeSources": {
+    "Process": 23,
+    "Start/End": 2,
+    "Decision": 8,
+    "(self-drawn)": 17,
+    "Dynamic connector": 28
+  },
+  "preview": "deployment-pod-flow.png",
+  "plannedEdges": 28,
+  "expectedConnects": 56,
+  "expectedShapes": 78,
+  "textNodesChecked": 33,
+  "maxFontSizeDeviationPt": 3.200000264769187e-09,
+  "expectedRouteVertices": 63,
+  "routeVerticesChecked": 63,
+  "maxRouteDeviationIn": 0,
+  "moveNode": "start",
+  "moveDeltaIn": 0.3,
+  "moveExpectedIn": 0.3
+}

@@ -1,0 +1,64 @@
+{
+  "page": {
+    "width": 10,
+    "height": 6,
+    "title": "局部微调与同向传播验证",
+    "diagramType": "flowchart"
+  },
+  "nodes": [
+    {
+      "id": "a",
+      "text": "上游",
+      "x": 0.7,
+      "y": 2,
+      "w": 2,
+      "h": 1,
+      "fixed": true
+    },
+    {
+      "id": "b",
+      "text": "当前环节",
+      "x": 4,
+      "y": 2.5,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "id": "c",
+      "text": "后续环节",
+      "x": 7,
+      "y": 2.5,
+      "w": 2,
+      "h": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "b",
+      "to": "c",
+      "fromPort": "right",
+      "toPort": "left"
+    }
+  ],
+  "localLayout": {
+    "adjust": {
+      "order": [
+        "b",
+        "c"
+      ],
+      "maxShift": 0.5,
+      "step": -1,
+      "maxRounds": 2
+    },
+    "routing": {
+      "maxStates": 80000
+    },
+    "failurePolicy": "preserve"
+  }
+}

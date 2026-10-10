@@ -1,0 +1,137 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "发布流程自动布局适配验证",
+    "locale": "zh-CN",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    {
+      "id": "prepare",
+      "label": "准备与检查"
+    },
+    {
+      "id": "recovery",
+      "label": "失败处理",
+      "variant": "exception"
+    }
+  ],
+  "mainPath": [
+    "request",
+    "build",
+    "check",
+    "deploy",
+    "verify",
+    "finish"
+  ],
+  "nodes": [
+    {
+      "id": "request",
+      "lane": "prepare",
+      "col": 0,
+      "type": "backend",
+      "label": "提交申请",
+      "width": 132
+    },
+    {
+      "id": "build",
+      "lane": "prepare",
+      "col": 1,
+      "type": "backend",
+      "label": "构建版本",
+      "width": 132
+    },
+    {
+      "id": "check",
+      "lane": "prepare",
+      "col": 2,
+      "type": "backend",
+      "label": "执行检查",
+      "width": 132
+    },
+    {
+      "id": "deploy",
+      "lane": "prepare",
+      "col": 3,
+      "type": "backend",
+      "label": "部署服务",
+      "width": 132
+    },
+    {
+      "id": "verify",
+      "lane": "prepare",
+      "col": 4,
+      "type": "backend",
+      "label": "业务验证",
+      "width": 132
+    },
+    {
+      "id": "finish",
+      "lane": "prepare",
+      "col": 5,
+      "type": "backend",
+      "label": "完成发布",
+      "width": 132
+    },
+    {
+      "id": "fix",
+      "lane": "recovery",
+      "col": 2,
+      "type": "backend",
+      "label": "修复并重新申请",
+      "width": 132
+    },
+    {
+      "id": "rollback",
+      "lane": "recovery",
+      "col": 4,
+      "type": "backend",
+      "label": "回退并停止发布",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "from": "request",
+      "to": "build"
+    },
+    {
+      "id": "e2",
+      "from": "build",
+      "to": "check"
+    },
+    {
+      "id": "e3",
+      "from": "check",
+      "to": "deploy",
+      "label": "通过",
+      "route": "straight"
+    },
+    {
+      "id": "e4",
+      "from": "deploy",
+      "to": "verify"
+    },
+    {
+      "id": "e5",
+      "from": "verify",
+      "to": "finish",
+      "label": "通过",
+      "route": "straight"
+    },
+    {
+      "id": "e6",
+      "from": "check",
+      "to": "fix",
+      "label": "失败"
+    },
+    {
+      "id": "e8",
+      "from": "verify",
+      "to": "rollback",
+      "label": "失败"
+    }
+  ]
+}

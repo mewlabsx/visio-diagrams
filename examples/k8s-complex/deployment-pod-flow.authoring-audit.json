@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "nodes": 33,
+  "edges": 28,
+  "crossings": 0,
+  "scope": "Orthogonal routes, node interiors, node/label overlap, labels vs all routes, collinear overlap; not native container or global optimality"
+}

@@ -1,0 +1,27 @@
+{
+  "vsdx": "k8s-architecture.vsdx",
+  "planned": "k8s-architecture.planned.json",
+  "status": "PASS",
+  "openMs": 659,
+  "pageWidth": 16.5,
+  "pageHeight": 13.2,
+  "shapes": 63,
+  "connects": 40,
+  "shapeSources": {
+    "(self-drawn)": 24,
+    "Process": 19,
+    "Dynamic connector": 20
+  },
+  "preview": "k8s-architecture.png",
+  "plannedEdges": 20,
+  "expectedConnects": 40,
+  "expectedShapes": 63,
+  "textNodesChecked": 22,
+  "maxFontSizeDeviationPt": 3.200000264769187e-09,
+  "expectedRouteVertices": 64,
+  "routeVerticesChecked": 64,
+  "maxRouteDeviationIn": 0,
+  "moveNode": "client",
+  "moveDeltaIn": 0.3,
+  "moveExpectedIn": 0.3
+}

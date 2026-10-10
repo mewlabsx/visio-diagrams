@@ -1,0 +1,24 @@
+{
+  "page": {"width": 12, "height": 7.5, "title": "业务服务平台总体架构（示例）"},
+  "nodes": [
+    {"id":"app","kind":"container","text":"应用层","x":0.4,"y":0.75,"w":9,"h":1.3,"fill":"#FFFFFF"},
+    {"id":"platform","kind":"container","text":"平台服务层","x":0.4,"y":2.3,"w":9,"h":2.7,"fill":"#FFFFFF"},
+    {"id":"infra","kind":"container","text":"基础资源层","x":0.4,"y":5.25,"w":9,"h":1.6,"fill":"#FFFFFF"},
+    {"id":"ops","kind":"container","text":"统一管理","x":9.7,"y":0.75,"w":1.9,"h":6.1,"fill":"#F0F0F0"},
+    {"id":"portal","text":"业务门户","x":0.8,"y":1.25,"w":2.4,"h":0.55,"fill":"#BDD7EE"},
+    {"id":"analysis","text":"分析应用","x":3.6,"y":1.25,"w":2.4,"h":0.55,"fill":"#BDD7EE"},
+    {"id":"service","text":"服务应用","x":6.4,"y":1.25,"w":2.4,"h":0.55,"fill":"#BDD7EE"},
+    {"id":"develop","text":"服务开发集成","x":0.8,"y":2.9,"w":2.4,"h":0.7,"fill":"#D7E3BF"},
+    {"id":"deploy","text":"服务部署管理","x":3.6,"y":2.9,"w":2.4,"h":0.7,"fill":"#D7E3BF"},
+    {"id":"data","text":"数据共享交换","x":6.4,"y":2.9,"w":2.4,"h":0.7,"fill":"#D7E3BF"},
+    {"id":"runtime","text":"服务运行支撑","x":0.8,"y":4,"w":8,"h":0.65,"fill":"#FEE599"},
+    {"id":"compute","text":"计算资源","x":0.8,"y":5.9,"w":2.4,"h":0.65,"fill":"#F7CBAC"},
+    {"id":"storage","text":"存储资源","x":3.6,"y":5.9,"w":2.4,"h":0.65,"fill":"#F7CBAC"},
+    {"id":"network","text":"网络资源","x":6.4,"y":5.9,"w":2.4,"h":0.65,"fill":"#F7CBAC"},
+    {"id":"auth","text":"用户权限","x":9.95,"y":1.4,"w":1.4,"h":0.8},
+    {"id":"monitor","text":"监控管理","x":9.95,"y":2.75,"w":1.4,"h":0.8},
+    {"id":"logs","text":"日志管理","x":9.95,"y":4.1,"w":1.4,"h":0.8},
+    {"id":"automation","text":"运维自动化","x":9.95,"y":5.45,"w":1.4,"h":0.8}
+  ],
+  "edges": []
+}

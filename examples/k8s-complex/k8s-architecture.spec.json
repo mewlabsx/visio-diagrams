@@ -1,0 +1,897 @@
+{
+  "page": {
+    "width": 16.5,
+    "height": 13.2,
+    "title": "Kubernetes 架构：控制平面、节点执行与服务数据面",
+    "colorFill": true
+  },
+  "nodes": [
+    {
+      "id": "control_caption",
+      "text": "控制平面：所有资源状态读写经 API；下方箭头表示逻辑交互",
+      "x": 0.7,
+      "y": 0.8,
+      "w": 14.7,
+      "h": 0.4,
+      "kind": "text",
+      "fill": "#FFFFFF",
+      "fontSize": 13,
+      "bold": true
+    },
+    {
+      "id": "client",
+      "text": "kubectl / CI/CD\n应用 Deployment 清单",
+      "x": 0.7,
+      "y": 1.5,
+      "w": 3,
+      "h": 0.9,
+      "kind": "box",
+      "fill": "#D7E3BF",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "api",
+      "text": "kube-apiserver（可多副本）\n认证 / 授权 / 准入 / 资源 API\nREST 请求与 watch",
+      "x": 5.1,
+      "y": 1.5,
+      "w": 4.5,
+      "h": 1.25,
+      "kind": "box",
+      "fill": "#BDD7EE",
+      "fontSize": 12,
+      "bold": true
+    },
+    {
+      "id": "etcd",
+      "text": "etcd\n资源状态持久化 / 一致性存储",
+      "x": 11.2,
+      "y": 1.5,
+      "w": 3.6,
+      "h": 0.9,
+      "kind": "box",
+      "fill": "#BDD7EE",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "scheduler",
+      "text": "kube-scheduler\n筛选 / 打分 / Pod 绑定",
+      "x": 0.7,
+      "y": 3.8,
+      "w": 3,
+      "h": 0.95,
+      "kind": "box",
+      "fill": "#BDD7EE",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "controllers",
+      "text": "kube-controller-manager\nDeployment / ReplicaSet / Node\nEndpointSlice 等控制器调谐",
+      "x": 5.1,
+      "y": 3.8,
+      "w": 4.5,
+      "h": 0.95,
+      "kind": "box",
+      "fill": "#BDD7EE",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "cloud",
+      "text": "cloud-controller-manager\n可选：节点 / 路由 / 云负载均衡",
+      "x": 11.2,
+      "y": 3.8,
+      "w": 3.6,
+      "h": 0.95,
+      "kind": "box",
+      "fill": "#BDD7EE",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "worker_caption",
+      "text": "工作节点与集群扩展：以一个 Worker 的执行链为例，可水平扩展",
+      "x": 0.7,
+      "y": 5.25,
+      "w": 10.6,
+      "h": 0.4,
+      "kind": "text",
+      "fill": "#FFFFFF",
+      "fontSize": 13,
+      "bold": true
+    },
+    {
+      "id": "kubelet",
+      "text": "kubelet\n同步 PodSpec / 上报状态",
+      "x": 0.7,
+      "y": 6.4,
+      "w": 3,
+      "h": 0.85,
+      "kind": "box",
+      "fill": "#D7E3BF",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "runtime",
+      "text": "CRI 容器运行时\n例如 containerd / CRI-O",
+      "x": 4.6,
+      "y": 6.4,
+      "w": 3,
+      "h": 0.85,
+      "kind": "box",
+      "fill": "#D7E3BF",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "pod",
+      "text": "Pod / 应用容器\n共享网络与卷 / 执行工作负载",
+      "x": 8.5,
+      "y": 6.4,
+      "w": 3,
+      "h": 0.85,
+      "kind": "box",
+      "fill": "#D7E3BF",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "registry",
+      "text": "镜像仓库（集群外）\n镜像 / 凭据 / 分发",
+      "x": 12.4,
+      "y": 6.4,
+      "w": 3,
+      "h": 0.85,
+      "kind": "box",
+      "fill": "#F7CBAC",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "csi",
+      "text": "CSI 驱动（可选）\n卷发布 / 挂载 / 存储接入",
+      "x": 0.7,
+      "y": 8,
+      "w": 3,
+      "h": 0.9,
+      "kind": "box",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "cni",
+      "text": "CNI 网络插件\nPod IP / 网络配置",
+      "x": 4.6,
+      "y": 8,
+      "w": 3,
+      "h": 0.9,
+      "kind": "box",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "proxy",
+      "text": "kube-proxy / 替代实现\n监听 Service / EndpointSlice\n编程 Service 转发数据面",
+      "x": 8.5,
+      "y": 8,
+      "w": 3,
+      "h": 0.9,
+      "kind": "box",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "dns",
+      "text": "CoreDNS\nService 名称解析\n作为集群 Pod 运行",
+      "x": 12.4,
+      "y": 8,
+      "w": 3,
+      "h": 0.9,
+      "kind": "box",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "storage",
+      "text": "外部存储（可选）\n块 / 文件 / 云盘",
+      "x": 0.7,
+      "y": 9.8,
+      "w": 3,
+      "h": 0.65,
+      "kind": "box",
+      "fill": "#F7CBAC",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "network",
+      "text": "节点网络 / 转发数据面\nPod 网络与网络策略",
+      "x": 4.6,
+      "y": 9.8,
+      "w": 3,
+      "h": 0.65,
+      "kind": "box",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "service",
+      "text": "Service / EndpointSlice\n声明对象 ≠ 转发进程",
+      "x": 8.5,
+      "y": 9.8,
+      "w": 3,
+      "h": 0.65,
+      "kind": "box",
+      "fill": "#BDD7EE",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "ingress",
+      "text": "Gateway / Ingress Controller\n可选的北南向流量入口",
+      "x": 12.4,
+      "y": 9.8,
+      "w": 3,
+      "h": 0.65,
+      "kind": "box",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "user",
+      "text": "业务客户端 / 外部请求",
+      "x": 12.4,
+      "y": 11.25,
+      "w": 3,
+      "h": 0.6,
+      "kind": "box",
+      "fill": "#F7CBAC",
+      "fontSize": 12,
+      "bold": false
+    },
+    {
+      "id": "notes",
+      "text": "图例：虚线 = API 观察与控制；实线 = 调用 / 配置 / 数据流（以标签区分）。交叉线不表示连接。\n这是通用逻辑架构，非某一集群部署清单；CoreDNS、代理及插件的实际部署位置取决于实现。\nService 访问由数据面实现转发，apiserver 不承载普通应用请求；入口图省略了部分逐跳转发细节。",
+      "x": 0.7,
+      "y": 12.2,
+      "w": 14.7,
+      "h": 0.8,
+      "kind": "text",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "bold": false
+    }
+  ],
+  "edges": [
+    {
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.5,
+      "toFraction": 0.36,
+      "routePoints": [
+        [
+          3.7,
+          1.95
+        ],
+        [
+          5.1,
+          1.95
+        ]
+      ],
+      "text": "HTTPS",
+      "dashed": false,
+      "from": "client",
+      "to": "api",
+      "label": {
+        "x": 3.95,
+        "y": 1.62,
+        "w": 0.85,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.36,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          9.6,
+          1.95
+        ],
+        [
+          11.2,
+          1.95
+        ]
+      ],
+      "text": "资源读写",
+      "dashed": false,
+      "from": "api",
+      "to": "etcd",
+      "label": {
+        "x": 9.78,
+        "y": 1.62,
+        "w": 1.1,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "top",
+      "toPort": "bottom",
+      "fromFraction": 0.5,
+      "toFraction": 0.18,
+      "routePoints": [
+        [
+          2.2,
+          3.8
+        ],
+        [
+          2.2,
+          3.2
+        ],
+        [
+          5.91,
+          3.2
+        ],
+        [
+          5.91,
+          2.75
+        ]
+      ],
+      "text": "watch / bind",
+      "dashed": true,
+      "from": "scheduler",
+      "to": "api",
+      "label": {
+        "x": 3.15,
+        "y": 2.86,
+        "w": 1.65,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "top",
+      "toPort": "bottom",
+      "fromFraction": 0.5,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          7.35,
+          3.8
+        ],
+        [
+          7.35,
+          2.75
+        ]
+      ],
+      "text": "watch / reconcile",
+      "dashed": true,
+      "from": "controllers",
+      "to": "api",
+      "label": {
+        "x": 7.65,
+        "y": 3.39,
+        "w": 2.25,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "top",
+      "toPort": "bottom",
+      "fromFraction": 0.5,
+      "toFraction": 0.82,
+      "routePoints": [
+        [
+          13.0,
+          3.8
+        ],
+        [
+          13,
+          3.2
+        ],
+        [
+          8.79,
+          3.2
+        ],
+        [
+          8.79,
+          2.75
+        ]
+      ],
+      "text": "资源观察 / 云协调",
+      "dashed": true,
+      "from": "cloud",
+      "to": "api",
+      "label": {
+        "x": 10,
+        "y": 2.9,
+        "w": 2,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "left",
+      "toPort": "left",
+      "fromFraction": 0.5,
+      "toFraction": 0.9,
+      "routePoints": [
+        [
+          0.7,
+          6.825
+        ],
+        [
+          0.35,
+          6.825
+        ],
+        [
+          0.35,
+          2.625
+        ],
+        [
+          5.1,
+          2.625
+        ]
+      ],
+      "text": "watch Pod / 状态",
+      "dashed": true,
+      "from": "kubelet",
+      "to": "api",
+      "label": {
+        "x": 0.75,
+        "y": 2.87,
+        "w": 2.15,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.5,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          3.7,
+          6.825
+        ],
+        [
+          4.6,
+          6.825
+        ]
+      ],
+      "text": "CRI",
+      "dashed": false,
+      "from": "kubelet",
+      "to": "runtime",
+      "label": {
+        "x": 3.92,
+        "y": 6.52,
+        "w": 0.45,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.5,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          7.6,
+          6.825
+        ],
+        [
+          8.5,
+          6.825
+        ]
+      ],
+      "text": "创建与执行",
+      "dashed": false,
+      "from": "runtime",
+      "to": "pod",
+      "label": {
+        "x": 7.61,
+        "y": 6.5,
+        "w": 0.85,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "top",
+      "toPort": "top",
+      "fromFraction": 0.5,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          6.1,
+          6.4
+        ],
+        [
+          6.1,
+          5.94
+        ],
+        [
+          13.9,
+          5.94
+        ],
+        [
+          13.9,
+          6.4
+        ]
+      ],
+      "text": "镜像拉取",
+      "dashed": false,
+      "from": "runtime",
+      "to": "registry",
+      "label": {
+        "x": 10.6,
+        "y": 5.7,
+        "w": 1.25,
+        "h": 0.2
+      }
+    },
+    {
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fromFraction": 0.5,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          2.2,
+          7.25
+        ],
+        [
+          2.2,
+          8
+        ]
+      ],
+      "text": "卷准备",
+      "dashed": false,
+      "from": "kubelet",
+      "to": "csi",
+      "label": {
+        "x": 2.45,
+        "y": 7.46,
+        "w": 0.8,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fromFraction": 0.5,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          6.1,
+          7.25
+        ],
+        [
+          6.1,
+          8
+        ]
+      ],
+      "text": "网络配置",
+      "dashed": false,
+      "from": "runtime",
+      "to": "cni",
+      "label": {
+        "x": 6.36,
+        "y": 7.46,
+        "w": 1,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "right",
+      "toPort": "bottom",
+      "fromFraction": 0.5,
+      "toFraction": 0.2,
+      "routePoints": [
+        [
+          7.6,
+          8.45
+        ],
+        [
+          8.04,
+          8.45
+        ],
+        [
+          8.04,
+          7.65
+        ],
+        [
+          9.1,
+          7.65
+        ],
+        [
+          9.1,
+          7.25
+        ]
+      ],
+      "text": "Pod 网络",
+      "dashed": false,
+      "from": "cni",
+      "to": "pod",
+      "label": {
+        "x": 8.6,
+        "y": 7.72,
+        "w": 1.1,
+        "h": 0.2
+      }
+    },
+    {
+      "fromPort": "right",
+      "toPort": "right",
+      "fromFraction": 0.5,
+      "toFraction": 0.85,
+      "routePoints": [
+        [
+          11.5,
+          8.45
+        ],
+        [
+          12,
+          8.45
+        ],
+        [
+          12,
+          4.98
+        ],
+        [
+          15.9,
+          4.98
+        ],
+        [
+          15.9,
+          2.5625
+        ],
+        [
+          9.6,
+          2.5625
+        ]
+      ],
+      "text": "watch 网络资源",
+      "dashed": true,
+      "from": "proxy",
+      "to": "api",
+      "label": {
+        "x": 12.2,
+        "y": 5.15,
+        "w": 1.9,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "right",
+      "toPort": "top",
+      "fromFraction": 0.5,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          11.5,
+          6.825
+        ],
+        [
+          11.95,
+          6.825
+        ],
+        [
+          11.95,
+          7.55
+        ],
+        [
+          13.9,
+          7.55
+        ],
+        [
+          13.9,
+          8
+        ]
+      ],
+      "text": "DNS 查询",
+      "dashed": false,
+      "from": "pod",
+      "to": "dns",
+      "label": {
+        "x": 12.5,
+        "y": 7.7,
+        "w": 1.1,
+        "h": 0.2
+      }
+    },
+    {
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fromFraction": 0.5,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          2.2,
+          8.9
+        ],
+        [
+          2.2,
+          9.8
+        ]
+      ],
+      "text": "存储接入",
+      "dashed": false,
+      "from": "csi",
+      "to": "storage",
+      "label": {
+        "x": 2.44,
+        "y": 9.18,
+        "w": 1.05,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fromFraction": 0.5,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          6.1,
+          8.9
+        ],
+        [
+          6.1,
+          9.8
+        ]
+      ],
+      "text": "配置连通 / 策略",
+      "dashed": false,
+      "from": "cni",
+      "to": "network",
+      "label": {
+        "x": 6.34,
+        "y": 9.18,
+        "w": 1.9,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "top",
+      "toPort": "bottom",
+      "fromFraction": 0.5,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          10.0,
+          9.8
+        ],
+        [
+          10.0,
+          8.9
+        ]
+      ],
+      "text": "规则来源",
+      "dashed": true,
+      "from": "service",
+      "to": "proxy",
+      "label": {
+        "x": 10.24,
+        "y": 9.18,
+        "w": 1,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "bottom",
+      "toPort": "right",
+      "fromFraction": 0.18,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          9.04,
+          8.9
+        ],
+        [
+          9.04,
+          9.6
+        ],
+        [
+          8.15,
+          9.6
+        ],
+        [
+          8.15,
+          10.125
+        ],
+        [
+          7.6,
+          10.125
+        ]
+      ],
+      "text": "转发规则",
+      "dashed": false,
+      "from": "proxy",
+      "to": "network",
+      "label": {
+        "x": 8.24,
+        "y": 9.26,
+        "w": 0.8,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "right",
+      "toPort": "bottom",
+      "fromFraction": 0.5,
+      "toFraction": 0.8,
+      "routePoints": [
+        [
+          15.4,
+          10.125
+        ],
+        [
+          16,
+          10.125
+        ],
+        [
+          16,
+          7.43
+        ],
+        [
+          10.9,
+          7.43
+        ],
+        [
+          10.9,
+          7.25
+        ]
+      ],
+      "text": "应用请求（逻辑）",
+      "dashed": false,
+      "from": "ingress",
+      "to": "pod",
+      "label": {
+        "x": 12.5,
+        "y": 9.18,
+        "w": 2.4,
+        "h": 0.24
+      }
+    },
+    {
+      "fromPort": "top",
+      "toPort": "bottom",
+      "fromFraction": 0.5,
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          13.9,
+          11.25
+        ],
+        [
+          13.9,
+          10.45
+        ]
+      ],
+      "text": "HTTPS",
+      "dashed": false,
+      "from": "user",
+      "to": "ingress",
+      "label": {
+        "x": 14.15,
+        "y": 10.72,
+        "w": 0.85,
+        "h": 0.24
+      }
+    }
+  ],
+  "_authoring": {
+    "routing": "explicit authored orthogonal routes",
+    "grouping": "logical captions; no native container membership",
+    "fontPolicy": "preserve input sizes"
+  }
+}

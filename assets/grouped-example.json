@@ -1,0 +1,93 @@
+{
+  "page": {
+    "width": 10,
+    "height": 7,
+    "title": "成组连接线均分验证",
+    "diagramType": "flowchart"
+  },
+  "nodes": [
+    {
+      "id": "a",
+      "kind": "box",
+      "text": "组件 A",
+      "x": 0.7,
+      "y": 1.5,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "id": "b",
+      "kind": "box",
+      "text": "组件 B",
+      "x": 7.1,
+      "y": 3,
+      "w": 2,
+      "h": 2.8
+    }
+  ],
+  "routingGroups": {
+    "parallel": {
+      "axis": "vertical",
+      "center": 5,
+      "spacing": 0.35
+    }
+  },
+  "edges": [
+    {
+      "from": "a",
+      "to": "b",
+      "fromPort": "right",
+      "toPort": "left",
+      "routeGroup": "parallel",
+      "text": "1",
+      "label": {
+        "x": 6.1,
+        "y": 2.8200000000000003,
+        "w": 0.5,
+        "h": 0.25
+      }
+    },
+    {
+      "from": "a",
+      "to": "b",
+      "fromPort": "right",
+      "toPort": "left",
+      "routeGroup": "parallel",
+      "text": "2",
+      "label": {
+        "x": 6.1,
+        "y": 3.6733333333333333,
+        "w": 0.5,
+        "h": 0.25
+      }
+    },
+    {
+      "from": "a",
+      "to": "b",
+      "fromPort": "right",
+      "toPort": "left",
+      "routeGroup": "parallel",
+      "text": "3",
+      "label": {
+        "x": 6.1,
+        "y": 4.526666666666666,
+        "w": 0.5,
+        "h": 0.25
+      }
+    },
+    {
+      "from": "a",
+      "to": "b",
+      "fromPort": "right",
+      "toPort": "left",
+      "routeGroup": "parallel",
+      "text": "4",
+      "label": {
+        "x": 6.1,
+        "y": 5.38,
+        "w": 0.5,
+        "h": 0.25
+      }
+    }
+  ]
+}

@@ -1,0 +1,334 @@
+{
+  "page": {
+    "width": 6.5,
+    "height": 18.2,
+    "title": "kubectl apply 创建容器：Kubernetes 内部组件 UML 活动图",
+    "colorFill": true
+  },
+  "localLayout": {
+    "fold": {
+      "mode": "auto",
+      "minNodes": 8,
+      "mainPath": [
+        "start",
+        "a1",
+        "a2",
+        "a3",
+        "d1",
+        "a4",
+        "a5",
+        "a6",
+        "a7",
+        "a8",
+        "a9",
+        "a10",
+        "a11",
+        "a12",
+        "a13",
+        "end"
+      ],
+      "branchAnchors": {
+        "fail": "d1"
+      },
+      "firstCenter": 4.4,
+      "columnPitch": 4.7,
+      "rowGap": 0.42,
+      "top": 1.1
+    },
+    "routing": {
+      "maxStates": 200000,
+      "clearance": 0.18,
+      "bendPenalty": 2,
+      "crossingPenalty": 4
+    },
+    "failurePolicy": "stop"
+  },
+  "nodes": [
+    {
+      "id": "start",
+      "kind": "ellipse",
+      "text": "",
+      "x": 4.24,
+      "y": 1.1,
+      "w": 0.32,
+      "h": 0.32,
+      "fill": "#000000"
+    },
+    {
+      "id": "a1",
+      "kind": "box",
+      "text": "【kubectl】\n解析 YAML 并构造资源对象",
+      "x": 2.9,
+      "y": 1.84,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#D7E3BF",
+      "fontSize": 10
+    },
+    {
+      "id": "a2",
+      "kind": "box",
+      "text": "【kubectl】\n调用 kube-apiserver\n发起 REST 请求",
+      "x": 2.9,
+      "y": 2.88,
+      "w": 3.0,
+      "h": 0.72,
+      "fill": "#D7E3BF",
+      "fontSize": 10
+    },
+    {
+      "id": "a3",
+      "kind": "box",
+      "text": "【kube-apiserver】\n认证 → 授权 → 准入控制",
+      "x": 2.9,
+      "y": 4.02,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#BDD7EE",
+      "fontSize": 10
+    },
+    {
+      "id": "d1",
+      "kind": "diamond",
+      "text": "校验通过？",
+      "x": 3.4,
+      "y": 5.06,
+      "w": 2.0,
+      "h": 0.9,
+      "fill": "#FEE599",
+      "fontSize": 10
+    },
+    {
+      "id": "a4",
+      "kind": "box",
+      "text": "【kube-apiserver】\n写入 etcd 持久化对象",
+      "x": 2.9,
+      "y": 6.38,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#BDD7EE",
+      "fontSize": 10
+    },
+    {
+      "id": "a5",
+      "kind": "box",
+      "text": "【kube-scheduler】\n过滤 + 打分，选择节点",
+      "x": 2.9,
+      "y": 7.42,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#BDD7EE",
+      "fontSize": 10
+    },
+    {
+      "id": "a6",
+      "kind": "box",
+      "text": "【kube-scheduler】\n写入绑定 Bind",
+      "x": 2.9,
+      "y": 8.46,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#BDD7EE",
+      "fontSize": 10
+    },
+    {
+      "id": "a7",
+      "kind": "box",
+      "text": "【kubelet】\nwatch 到本节点 Pod",
+      "x": 2.9,
+      "y": 9.5,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#F7CBAC",
+      "fontSize": 10
+    },
+    {
+      "id": "a8",
+      "kind": "box",
+      "text": "【kubelet → CSI】\n挂载卷并等待就绪",
+      "x": 2.9,
+      "y": 10.54,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#F7CBAC",
+      "fontSize": 10
+    },
+    {
+      "id": "a9",
+      "kind": "box",
+      "text": "【containerd】\n创建 Pod 沙箱",
+      "x": 2.9,
+      "y": 11.58,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#F7CBAC",
+      "fontSize": 10
+    },
+    {
+      "id": "a10",
+      "kind": "box",
+      "text": "【CNI 插件】\n配置 Pod 网络并分配 IP",
+      "x": 2.9,
+      "y": 12.62,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#F7CBAC",
+      "fontSize": 10
+    },
+    {
+      "id": "a11",
+      "kind": "box",
+      "text": "【containerd】\n从 Registry 拉取镜像",
+      "x": 2.9,
+      "y": 13.66,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#F7CBAC",
+      "fontSize": 10
+    },
+    {
+      "id": "a12",
+      "kind": "box",
+      "text": "【containerd → runc】\n创建并启动业务容器",
+      "x": 2.9,
+      "y": 14.7,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#F7CBAC",
+      "fontSize": 10
+    },
+    {
+      "id": "a13",
+      "kind": "box",
+      "text": "【kubelet】\n上报 Pod 状态 Running",
+      "x": 2.9,
+      "y": 15.74,
+      "w": 3.0,
+      "h": 0.62,
+      "fill": "#F7CBAC",
+      "fontSize": 10
+    },
+    {
+      "id": "end",
+      "kind": "ellipse",
+      "text": "●",
+      "x": 4.15,
+      "y": 16.78,
+      "w": 0.5,
+      "h": 0.5,
+      "fill": "#FFFFFF",
+      "fontSize": 13
+    },
+    {
+      "id": "fail",
+      "kind": "box",
+      "text": "失败终止\n返回 401/403/拒绝",
+      "x": 0.5,
+      "y": 5.2,
+      "w": 2.2,
+      "h": 0.62,
+      "fill": "#F7CBAC",
+      "fontSize": 10
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "a1",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a1",
+      "to": "a2",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a2",
+      "to": "a3",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a3",
+      "to": "d1",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "d1",
+      "to": "a4",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "text": "是"
+    },
+    {
+      "from": "a4",
+      "to": "a5",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a5",
+      "to": "a6",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a6",
+      "to": "a7",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a7",
+      "to": "a8",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a8",
+      "to": "a9",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a9",
+      "to": "a10",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a10",
+      "to": "a11",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a11",
+      "to": "a12",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a12",
+      "to": "a13",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "a13",
+      "to": "end",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "d1",
+      "to": "fail",
+      "fromPort": "left",
+      "toPort": "right",
+      "text": "否"
+    }
+  ]
+}

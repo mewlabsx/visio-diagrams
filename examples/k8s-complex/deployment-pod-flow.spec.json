@@ -1,0 +1,1354 @@
+{
+  "page": {
+    "width": 22.5,
+    "height": 15.2,
+    "title": "kubectl apply Deployment YAML：Pod 创建与异常判断",
+    "colorFill": true,
+    "diagramType": "flowchart"
+  },
+  "nodes": [
+    {
+      "id": "phase_0",
+      "text": "① 客户端与资源提交",
+      "x": 1.0,
+      "y": 0.78,
+      "w": 6.3,
+      "h": 0.42,
+      "kind": "box",
+      "fill": "#BDD7EE",
+      "fontSize": 14,
+      "bold": true
+    },
+    {
+      "id": "start",
+      "text": "开始：提交 Deployment\n目标 replicas > 0",
+      "x": 1.0,
+      "y": 1.55,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "terminator",
+      "fill": "#D7E3BF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "parse",
+      "text": "kubectl 读取清单\n解析 YAML / 资源类型",
+      "x": 1.0,
+      "y": 3.27,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#FFFFFF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "yaml_gate",
+      "text": "清单解析与\n客户端检查通过？",
+      "x": 1.0,
+      "y": 4.99,
+      "w": 3.15,
+      "h": 1.12,
+      "kind": "diamond",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "send",
+      "text": "API 执行认证 / 授权 / 准入\n持久化 Deployment 后返回",
+      "x": 1.0,
+      "y": 6.71,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#FFFFFF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "api_gate",
+      "text": "API 请求成功\n且结果已确认？",
+      "x": 1.0,
+      "y": 8.43,
+      "w": 3.15,
+      "h": 1.12,
+      "kind": "diamond",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "persist",
+      "text": "kubectl 显示 created / configured\n仅确认 Deployment 已提交",
+      "x": 1.0,
+      "y": 10.15,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#FFFFFF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "deploy_ctrl",
+      "text": "Deployment 控制器异步调谐\n创建 / 调整 ReplicaSet",
+      "x": 1.0,
+      "y": 11.870000000000001,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#FFFFFF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "phase_1",
+      "text": "② 控制器、Pod 对象与调度",
+      "x": 8.25,
+      "y": 0.78,
+      "w": 6.3,
+      "h": 0.42,
+      "kind": "box",
+      "fill": "#BDD7EE",
+      "fontSize": 14,
+      "bold": true
+    },
+    {
+      "id": "rs_ctrl",
+      "text": "ReplicaSet 控制器异步调谐\n经 API 请求创建 Pod",
+      "x": 8.25,
+      "y": 1.55,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#FFFFFF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "pod_gate",
+      "text": "Pod 对象创建成功？\n准入 / 配额等通过？",
+      "x": 8.25,
+      "y": 3.27,
+      "w": 3.15,
+      "h": 1.12,
+      "kind": "diamond",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "schedule",
+      "text": "scheduler 筛选 / 打分 / 绑定\n通过 API 写回调度结果",
+      "x": 8.25,
+      "y": 4.99,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#FFFFFF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "schedule_gate",
+      "text": "节点选择与\n绑定写回成功？",
+      "x": 8.25,
+      "y": 6.71,
+      "w": 3.15,
+      "h": 1.12,
+      "kind": "diamond",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "bind",
+      "text": "Pod 已绑定目标节点\n等待该节点 kubelet 同步",
+      "x": 8.25,
+      "y": 8.43,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#FFFFFF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "kubelet",
+      "text": "目标节点 kubelet 同步 Pod\n准备卷 / CRI sandbox / CNI",
+      "x": 8.25,
+      "y": 10.15,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#FFFFFF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "setup_gate",
+      "text": "卷、sandbox 与\n网络初始化成功？",
+      "x": 8.25,
+      "y": 11.870000000000001,
+      "w": 3.15,
+      "h": 1.12,
+      "kind": "diamond",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "phase_2",
+      "text": "③ 节点执行与工作负载就绪",
+      "x": 15.5,
+      "y": 0.78,
+      "w": 6.3,
+      "h": 0.42,
+      "kind": "box",
+      "fill": "#BDD7EE",
+      "fontSize": 14,
+      "bold": true
+    },
+    {
+      "id": "image",
+      "text": "容器运行时准备所需镜像\n按 imagePullPolicy 获取 / 复用",
+      "x": 15.5,
+      "y": 1.55,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#FFFFFF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "image_gate",
+      "text": "所需镜像\n获取成功？",
+      "x": 15.5,
+      "y": 3.27,
+      "w": 3.15,
+      "h": 1.12,
+      "kind": "diamond",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "start_containers",
+      "text": "按需运行 initContainers\n创建并启动应用容器",
+      "x": 15.5,
+      "y": 4.99,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#FFFFFF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "runtime_gate",
+      "text": "初始化完成且应用\n能持续运行？",
+      "x": 15.5,
+      "y": 6.71,
+      "w": 3.15,
+      "h": 1.12,
+      "kind": "diamond",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "observe",
+      "text": "kubelet 检查探针 / readinessGates\n上报状态；控制器汇总 rollout",
+      "x": 15.5,
+      "y": 8.43,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#FFFFFF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "ready_gate",
+      "text": "期望副本达到可用条件\n且 rollout 完成？",
+      "x": 15.5,
+      "y": 10.15,
+      "w": 3.15,
+      "h": 1.12,
+      "kind": "diamond",
+      "fill": "#FEE599",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "success",
+      "text": "完成：目标 Pod Ready\nDeployment rollout 完成",
+      "x": 15.5,
+      "y": 11.870000000000001,
+      "w": 3.15,
+      "h": 0.8,
+      "kind": "terminator",
+      "fill": "#D7E3BF",
+      "fontSize": 12,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "err_yaml",
+      "text": "清单无效 / 字段或类型错误\n修复 YAML 后重新 apply",
+      "x": 4.72,
+      "y": 5.050000000000001,
+      "w": 2.53,
+      "h": 1.0,
+      "kind": "box",
+      "fill": "#F7CBAC",
+      "fontSize": 11,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "err_api",
+      "text": "API 拒绝：修复凭据 / RBAC / 准入\n超时：先 GET 确认结果\n不要把响应丢失当成未创建",
+      "x": 4.72,
+      "y": 8.49,
+      "w": 2.53,
+      "h": 1.0,
+      "kind": "box",
+      "fill": "#F7CBAC",
+      "fontSize": 11,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "err_pod",
+      "text": "Pod 尚未创建；检查控制器 Events\n配额 / 准入 / ServiceAccount\n修复后由控制器继续调谐",
+      "x": 11.969999999999999,
+      "y": 3.33,
+      "w": 2.53,
+      "h": 1.0,
+      "kind": "box",
+      "fill": "#F7CBAC",
+      "fontSize": 11,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "err_schedule",
+      "text": "Pending / FailedScheduling\n资源不足、亲和性、污点或 PVC\n修复约束 / 容量后等待重调度",
+      "x": 11.969999999999999,
+      "y": 6.77,
+      "w": 2.53,
+      "h": 1.0,
+      "kind": "box",
+      "fill": "#F7CBAC",
+      "fontSize": 11,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "err_setup",
+      "text": "FailedMount / sandbox / CNI 错误\n检查存储与节点网络\n修复后 kubelet 继续同步",
+      "x": 11.969999999999999,
+      "y": 11.930000000000001,
+      "w": 2.53,
+      "h": 1.0,
+      "kind": "box",
+      "fill": "#F7CBAC",
+      "fontSize": 11,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "err_image",
+      "text": "ErrImagePull / ImagePullBackOff\n检查镜像、凭据与网络\n修复后等待退避重试",
+      "x": 19.22,
+      "y": 3.33,
+      "w": 2.53,
+      "h": 1.0,
+      "kind": "box",
+      "fill": "#F7CBAC",
+      "fontSize": 11,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "err_runtime",
+      "text": "Init 失败 / CrashLoopBackOff\n检查日志、退出码 / OOMKilled\n修复应用或配置；按策略重启",
+      "x": 19.22,
+      "y": 6.77,
+      "w": 2.53,
+      "h": 1.0,
+      "kind": "box",
+      "fill": "#F7CBAC",
+      "fontSize": 11,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "err_ready",
+      "text": "Running 但未 Ready / rollout 超时\n排查探针、依赖与全部期望副本\n超时不代表自动回滚",
+      "x": 19.22,
+      "y": 10.21,
+      "w": 2.53,
+      "h": 1.0,
+      "kind": "box",
+      "fill": "#F7CBAC",
+      "fontSize": 11,
+      "bold": false,
+      "fixed": true
+    },
+    {
+      "id": "notes",
+      "text": "阅读顺序：左列 → 中列 → 右列；箭头表示逻辑检查点，不是同步 RPC 调用；卷、网络与镜像步骤可交错。\n各控制器、scheduler 与 kubelet 异步协调；Deployment 请求通过不保证后续 Pod 准入、调度或就绪。\n异常框是观察与修复路径，并非统一终止状态；修复后按阶段重新提交或等待调谐。图中未展开自动重试循环。",
+      "x": 0.8,
+      "y": 14.05,
+      "w": 21,
+      "h": 0.8,
+      "kind": "box",
+      "fill": "#BDD7EE",
+      "fontSize": 11,
+      "bold": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "parse",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          2.575,
+          2.35
+        ],
+        [
+          2.575,
+          3.27
+        ]
+      ],
+      "routePoints": [
+        [
+          2.575,
+          2.35
+        ],
+        [
+          2.575,
+          3.27
+        ]
+      ]
+    },
+    {
+      "from": "parse",
+      "to": "yaml_gate",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          2.575,
+          4.07
+        ],
+        [
+          2.575,
+          4.99
+        ]
+      ],
+      "routePoints": [
+        [
+          2.575,
+          4.07
+        ],
+        [
+          2.575,
+          4.99
+        ]
+      ]
+    },
+    {
+      "from": "yaml_gate",
+      "to": "send",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          2.575,
+          6.11
+        ],
+        [
+          2.575,
+          6.71
+        ]
+      ],
+      "text": "是",
+      "routePoints": [
+        [
+          2.575,
+          6.11
+        ],
+        [
+          2.575,
+          6.71
+        ]
+      ],
+      "label": {
+        "x": 1.9949999999999999,
+        "y": 6.29,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "send",
+      "to": "api_gate",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          2.575,
+          7.51
+        ],
+        [
+          2.575,
+          8.43
+        ]
+      ],
+      "routePoints": [
+        [
+          2.575,
+          7.51
+        ],
+        [
+          2.575,
+          8.43
+        ]
+      ]
+    },
+    {
+      "from": "api_gate",
+      "to": "persist",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          2.575,
+          9.55
+        ],
+        [
+          2.575,
+          10.15
+        ]
+      ],
+      "text": "是",
+      "routePoints": [
+        [
+          2.575,
+          9.55
+        ],
+        [
+          2.575,
+          10.15
+        ]
+      ],
+      "label": {
+        "x": 1.9949999999999999,
+        "y": 9.730000000000002,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "persist",
+      "to": "deploy_ctrl",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          2.575,
+          10.950000000000001
+        ],
+        [
+          2.575,
+          11.870000000000001
+        ]
+      ],
+      "routePoints": [
+        [
+          2.575,
+          10.950000000000001
+        ],
+        [
+          2.575,
+          11.870000000000001
+        ]
+      ]
+    },
+    {
+      "from": "deploy_ctrl",
+      "to": "rs_ctrl",
+      "fromPort": "right",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          4.15,
+          12.270000000000001
+        ],
+        [
+          7.58,
+          12.270000000000001
+        ],
+        [
+          7.58,
+          1.3
+        ],
+        [
+          9.825,
+          1.3
+        ],
+        [
+          9.825,
+          1.55
+        ]
+      ],
+      "routePoints": [
+        [
+          4.15,
+          12.270000000000001
+        ],
+        [
+          7.58,
+          12.270000000000001
+        ],
+        [
+          7.58,
+          1.3
+        ],
+        [
+          9.825,
+          1.3
+        ],
+        [
+          9.825,
+          1.55
+        ]
+      ]
+    },
+    {
+      "from": "rs_ctrl",
+      "to": "pod_gate",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          9.825,
+          2.35
+        ],
+        [
+          9.825,
+          3.27
+        ]
+      ],
+      "routePoints": [
+        [
+          9.825,
+          2.35
+        ],
+        [
+          9.825,
+          3.27
+        ]
+      ]
+    },
+    {
+      "from": "pod_gate",
+      "to": "schedule",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          9.825,
+          4.390000000000001
+        ],
+        [
+          9.825,
+          4.99
+        ]
+      ],
+      "text": "是",
+      "routePoints": [
+        [
+          9.825,
+          4.390000000000001
+        ],
+        [
+          9.825,
+          4.99
+        ]
+      ],
+      "label": {
+        "x": 9.245,
+        "y": 4.57,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "schedule",
+      "to": "schedule_gate",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          9.825,
+          5.79
+        ],
+        [
+          9.825,
+          6.71
+        ]
+      ],
+      "routePoints": [
+        [
+          9.825,
+          5.79
+        ],
+        [
+          9.825,
+          6.71
+        ]
+      ]
+    },
+    {
+      "from": "schedule_gate",
+      "to": "bind",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          9.825,
+          7.83
+        ],
+        [
+          9.825,
+          8.43
+        ]
+      ],
+      "text": "是",
+      "routePoints": [
+        [
+          9.825,
+          7.83
+        ],
+        [
+          9.825,
+          8.43
+        ]
+      ],
+      "label": {
+        "x": 9.245,
+        "y": 8.01,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "bind",
+      "to": "kubelet",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          9.825,
+          9.23
+        ],
+        [
+          9.825,
+          10.15
+        ]
+      ],
+      "routePoints": [
+        [
+          9.825,
+          9.23
+        ],
+        [
+          9.825,
+          10.15
+        ]
+      ]
+    },
+    {
+      "from": "kubelet",
+      "to": "setup_gate",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          9.825,
+          10.950000000000001
+        ],
+        [
+          9.825,
+          11.870000000000001
+        ]
+      ],
+      "routePoints": [
+        [
+          9.825,
+          10.950000000000001
+        ],
+        [
+          9.825,
+          11.870000000000001
+        ]
+      ]
+    },
+    {
+      "from": "setup_gate",
+      "to": "image",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          9.825,
+          12.990000000000002
+        ],
+        [
+          9.825,
+          13.45
+        ],
+        [
+          14.83,
+          13.45
+        ],
+        [
+          14.83,
+          1.3
+        ],
+        [
+          17.075,
+          1.3
+        ],
+        [
+          17.075,
+          1.55
+        ]
+      ],
+      "text": "是",
+      "routePoints": [
+        [
+          9.825,
+          12.990000000000002
+        ],
+        [
+          9.825,
+          13.45
+        ],
+        [
+          14.83,
+          13.45
+        ],
+        [
+          14.83,
+          1.3
+        ],
+        [
+          17.075,
+          1.3
+        ],
+        [
+          17.075,
+          1.55
+        ]
+      ],
+      "label": {
+        "x": 10.024999999999999,
+        "y": 13.060000000000002,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "image",
+      "to": "image_gate",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          17.075,
+          2.35
+        ],
+        [
+          17.075,
+          3.27
+        ]
+      ],
+      "routePoints": [
+        [
+          17.075,
+          2.35
+        ],
+        [
+          17.075,
+          3.27
+        ]
+      ]
+    },
+    {
+      "from": "image_gate",
+      "to": "start_containers",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          17.075,
+          4.390000000000001
+        ],
+        [
+          17.075,
+          4.99
+        ]
+      ],
+      "text": "是",
+      "routePoints": [
+        [
+          17.075,
+          4.390000000000001
+        ],
+        [
+          17.075,
+          4.99
+        ]
+      ],
+      "label": {
+        "x": 16.494999999999997,
+        "y": 4.57,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "start_containers",
+      "to": "runtime_gate",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          17.075,
+          5.79
+        ],
+        [
+          17.075,
+          6.71
+        ]
+      ],
+      "routePoints": [
+        [
+          17.075,
+          5.79
+        ],
+        [
+          17.075,
+          6.71
+        ]
+      ]
+    },
+    {
+      "from": "runtime_gate",
+      "to": "observe",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          17.075,
+          7.83
+        ],
+        [
+          17.075,
+          8.43
+        ]
+      ],
+      "text": "是",
+      "routePoints": [
+        [
+          17.075,
+          7.83
+        ],
+        [
+          17.075,
+          8.43
+        ]
+      ],
+      "label": {
+        "x": 16.494999999999997,
+        "y": 8.01,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "observe",
+      "to": "ready_gate",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          17.075,
+          9.23
+        ],
+        [
+          17.075,
+          10.15
+        ]
+      ],
+      "routePoints": [
+        [
+          17.075,
+          9.23
+        ],
+        [
+          17.075,
+          10.15
+        ]
+      ]
+    },
+    {
+      "from": "ready_gate",
+      "to": "success",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "fixedRoute": [
+        [
+          17.075,
+          11.27
+        ],
+        [
+          17.075,
+          11.870000000000001
+        ]
+      ],
+      "text": "是",
+      "routePoints": [
+        [
+          17.075,
+          11.27
+        ],
+        [
+          17.075,
+          11.870000000000001
+        ]
+      ],
+      "label": {
+        "x": 16.494999999999997,
+        "y": 11.450000000000001,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "yaml_gate",
+      "to": "err_yaml",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "否",
+      "fixedRoute": [
+        [
+          4.15,
+          5.550000000000001
+        ],
+        [
+          4.72,
+          5.550000000000001
+        ]
+      ],
+      "routePoints": [
+        [
+          4.15,
+          5.550000000000001
+        ],
+        [
+          4.72,
+          5.550000000000001
+        ]
+      ],
+      "label": {
+        "x": 4.260000000000001,
+        "y": 5.2,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "api_gate",
+      "to": "err_api",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "否",
+      "fixedRoute": [
+        [
+          4.15,
+          8.99
+        ],
+        [
+          4.72,
+          8.99
+        ]
+      ],
+      "routePoints": [
+        [
+          4.15,
+          8.99
+        ],
+        [
+          4.72,
+          8.99
+        ]
+      ],
+      "label": {
+        "x": 4.260000000000001,
+        "y": 8.64,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "pod_gate",
+      "to": "err_pod",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "否",
+      "fixedRoute": [
+        [
+          11.4,
+          3.83
+        ],
+        [
+          11.969999999999999,
+          3.83
+        ]
+      ],
+      "routePoints": [
+        [
+          11.4,
+          3.83
+        ],
+        [
+          11.969999999999999,
+          3.83
+        ]
+      ],
+      "label": {
+        "x": 11.509999999999998,
+        "y": 3.48,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "schedule_gate",
+      "to": "err_schedule",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "否",
+      "fixedRoute": [
+        [
+          11.4,
+          7.27
+        ],
+        [
+          11.969999999999999,
+          7.27
+        ]
+      ],
+      "routePoints": [
+        [
+          11.4,
+          7.27
+        ],
+        [
+          11.969999999999999,
+          7.27
+        ]
+      ],
+      "label": {
+        "x": 11.509999999999998,
+        "y": 6.919999999999999,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "setup_gate",
+      "to": "err_setup",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "否",
+      "fixedRoute": [
+        [
+          11.4,
+          12.430000000000001
+        ],
+        [
+          11.969999999999999,
+          12.430000000000001
+        ]
+      ],
+      "routePoints": [
+        [
+          11.4,
+          12.430000000000001
+        ],
+        [
+          11.969999999999999,
+          12.430000000000001
+        ]
+      ],
+      "label": {
+        "x": 11.509999999999998,
+        "y": 12.080000000000002,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "image_gate",
+      "to": "err_image",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "否",
+      "fixedRoute": [
+        [
+          18.65,
+          3.83
+        ],
+        [
+          19.22,
+          3.83
+        ]
+      ],
+      "routePoints": [
+        [
+          18.65,
+          3.83
+        ],
+        [
+          19.22,
+          3.83
+        ]
+      ],
+      "label": {
+        "x": 18.759999999999998,
+        "y": 3.48,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "runtime_gate",
+      "to": "err_runtime",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "否",
+      "fixedRoute": [
+        [
+          18.65,
+          7.27
+        ],
+        [
+          19.22,
+          7.27
+        ]
+      ],
+      "routePoints": [
+        [
+          18.65,
+          7.27
+        ],
+        [
+          19.22,
+          7.27
+        ]
+      ],
+      "label": {
+        "x": 18.759999999999998,
+        "y": 6.919999999999999,
+        "w": 0.35,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "ready_gate",
+      "to": "err_ready",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "否",
+      "fixedRoute": [
+        [
+          18.65,
+          10.71
+        ],
+        [
+          19.22,
+          10.71
+        ]
+      ],
+      "routePoints": [
+        [
+          18.65,
+          10.71
+        ],
+        [
+          19.22,
+          10.71
+        ]
+      ],
+      "label": {
+        "x": 18.759999999999998,
+        "y": 10.360000000000001,
+        "w": 0.35,
+        "h": 0.24
+      }
+    }
+  ],
+  "_routingValidation": {
+    "plannedEdges": 28,
+    "overlaps": 0,
+    "crossings": 0,
+    "searchStates": 0,
+    "totalBends": 7,
+    "labelsPlaced": 16,
+    "scope": "All local routes and label rectangles checked; crossings penalized; visual QA still required"
+  },
+  "_localLayout": {
+    "moves": [],
+    "initialBends": 7,
+    "status": "PASS",
+    "totalBends": 7
+  },
+  "_authoring": {
+    "routing": "existing local_layout.solve + authored fixedRoute",
+    "labelCorrection": "setup_gate true label pinned near source",
+    "fontPolicy": "preserve input sizes"
+  }
+}
