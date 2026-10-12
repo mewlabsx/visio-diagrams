@@ -16,6 +16,7 @@ from pathlib import Path
 import zipfile
 from xml.etree import ElementTree as ET
 from xml.sax.saxutils import escape
+from containers import prepare, hierarchy, validate_geometry
 
 STENCIL = r"C:\Program Files\Microsoft Office\Root\Office16\Visio Content\2052\BASFLO_M.VSSX"
 BASE = Path(__file__).resolve().parent.parent / 'assets' / 'vsdx-base'
@@ -228,6 +229,8 @@ def build(spec, stencil=STENCIL):
     masters = load_masters(stencil)
     by_kind = {"box": "Process", "diamond": "Decision", "terminator": "Start/End"}
     nodes = spec["nodes"]
+    node_map, parents, children, ancestors = hierarchy(spec)
+    node_ids = {n['id']: i + 1 for i, n in enumerate(nodes)}
     ph = float(spec["page"]["height"])
     pw = float(spec["page"]["width"])
 
@@ -292,7 +295,12 @@ def build(spec, stencil=STENCIL):
         base.append(("LinePattern", '0' if kind == 'text' else ('2' if n.get('dashed') else '1'), None))
         base.append(('Rounding', min(n['w'], n['h']) / 2 if kind == 'terminator' else 0, 'IN'))
         if kind == 'container':
-            raise ValueError('Python backend container rendering is not yet accepted; use COM explicitly')
+            # The title occupies a dedicated strip; the rest remains clear for members.
+            header=n['headerHeight']
+            base=[(key,value,unit) for key,value,unit in base if not key.startswith('Txt')]
+            base.extend([('TxtPinX',n['w']/2,'IN'),('TxtPinY',n['h']-header/2,'IN'),
+                         ('TxtWidth',n['w']-2*n['padding'],'IN'),('TxtHeight',header,'IN'),
+                         ('TxtLocPinX',(n['w']-2*n['padding'])/2,'IN'),('TxtLocPinY',header/2,'IN')])
         base += [("LineColor", "#404040", None), ("LineWeight", 0.01041666666666667, "PT"),
                  ("Char.Font", None, None), ("Char.AsianFont", None, None),
                  ("Char.Size", (n.get("fontSize") or 11) / 72.0, "PT"),
@@ -303,6 +311,28 @@ def build(spec, stencil=STENCIL):
         m = chosen.get(n["id"])
         mattr = (" Master='%d'" % mid[m]) if m else ""
         body = fmt_cells(base)
+        # Text frames must also follow instance resizing, not just initial caches.
+        text_formulas={'LocPinX':'Width*0.5','LocPinY':'Height*0.5',
+                       'TxtPinX':'Width*0.5','TxtPinY':'Height*0.5',
+                       'TxtWidth':'Width','TxtHeight':'Height',
+                       'TxtLocPinX':'Width*0.5','TxtLocPinY':'Height*0.5'}
+        if kind=='container':
+            text_formulas.update(TxtPinY='Height-%s in'%num(n['headerHeight']/2),
+                                 TxtWidth='Width-%s in'%num(2*n['padding']),
+                                 TxtHeight='%s in'%num(n['headerHeight']),
+                                 TxtLocPinX='(Width-%s in)*0.5'%num(2*n['padding']),
+                                 TxtLocPinY='%s in'%num(n['headerHeight']/2))
+        for cell,formula in text_formulas.items():
+            body=re.sub(r"(<Cell N='%s'[^>]*?)/>"%re.escape(cell),lambda m:m.group(1)+" F='%s'/>"%formula,body)
+        relationships=[]
+        if n['id'] in parents:
+            relationships.append('DEPENDSON(4,Sheet.%d!SheetRef())'%node_ids[parents[n['id']]])
+        if children[n['id']]:
+            relationships.append('DEPENDSON(1,%s)'%','.join('Sheet.%d!SheetRef()'%node_ids[c] for c in children[n['id']]))
+        if relationships:
+            body += "<Cell N='Relationships' V='0' F='SUM(%s)'/>"%','.join(relationships)
+        if kind=='container':
+            body += "<Cell N='ShapePlaceStyle' V='15'/><Section N='User'><Row N='msvStructureType'><Cell N='Value' V='Container' U='STR'/></Row></Section>"
         # every shape carries its own scaled geometry and connection points
         body += shape_geom(kind, n["w"], n["h"])
         body += connection_section(n["w"], n["h"], extra[n['id']])
@@ -447,6 +477,7 @@ def build(spec, stencil=STENCIL):
 
 
 def write_vsdx(spec, out, stencil=STENCIL):
+    spec = prepare(spec)
     validate_spec(spec)
     out = Path(out)
     if out.exists():
@@ -504,17 +535,19 @@ def write_vsdx(spec, out, stencil=STENCIL):
 
 
 def validate_spec(spec):
+    validate_geometry(spec)
     def number(value):
         return isinstance(value, (float, int)) and not isinstance(value, bool) and math.isfinite(value)
     pw, ph = spec['page']['width'], spec['page']['height']
     if not all(number(v) and v > 0 for v in (pw, ph)):
         raise ValueError('Invalid page dimensions')
     ids = set()
+    kinds = {n['id']: n.get('kind') or 'box' for n in spec['nodes']}
     for n in spec['nodes']:
         if not isinstance(n.get('id'), str) or not n['id'] or n['id'] in ids:
             raise ValueError('Empty or duplicate node id')
         ids.add(n['id'])
-        if n.get('kind', 'box') not in ('box', 'diamond', 'ellipse', 'terminator', 'text'):
+        if n.get('kind', 'box') not in ('box', 'diamond', 'ellipse', 'terminator', 'text', 'container'):
             raise ValueError('Unsupported Python node kind: ' + str(n.get('kind')))
         if not all(number(n[k]) for k in ('x', 'y', 'w', 'h')):
             raise ValueError('Non-finite node dimensions')
@@ -535,6 +568,8 @@ def validate_spec(spec):
             f = e.get(end+'Fraction', .5)
             if not number(f) or not 0 <= f <= 1:
                 raise ValueError('Invalid port fraction')
+            if kinds[e[end]] in ('diamond','ellipse','terminator') and abs(f-.5)>1e-9:
+                raise ValueError('Nonrectangular ports must use axis endpoints')
         for p in e.get('routePoints', []):
             if len(p) != 2 or not all(number(v) for v in p) or not 0 <= p[0] <= pw or not 0 <= p[1] <= ph:
                 raise ValueError('Invalid route point')

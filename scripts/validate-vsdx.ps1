@@ -109,6 +109,17 @@ try {
     }
     $result.routeVerticesChecked = $checked
     $result.maxRouteDeviationIn  = [Math]::Round($worst, 6)
+    $result.containerChecks = @()
+    foreach ($containerPlan in @($plan.nodes | Where-Object { $_.kind -eq 'container' })) {
+      $containerShape = $pg.Shapes.ItemU("node_$($containerPlan.id)")
+      $expected = @($plan.nodes | Where-Object { $_.parent -eq $containerPlan.id } | ForEach-Object { [int]$pg.Shapes.ItemU("node_$($_.id)").ID } | Sort-Object)
+      $allMembers = @($containerShape.ContainerProperties.GetMemberShapes(16))
+      # Visio may attach internal connectors/labels as auxiliary members.
+      # Check the explicit business-node hierarchy exactly, and report auxiliaries.
+      $actual = @($allMembers | Where-Object { $pg.Shapes.ItemFromID([int]$_).NameU -like 'node_*' } | Sort-Object)
+      if (($actual -join ',') -ne ($expected -join ',')) { throw "Native container membership mismatch: $($containerPlan.id), actual=$($actual -join ','), expected=$($expected -join ',')" }
+      $result.containerChecks += @{ id=$containerPlan.id; members=$actual; auxiliaryMembers=@($allMembers | Where-Object { $pg.Shapes.ItemFromID([int]$_).NameU -notlike 'node_*' }) }
+    }
   }
   } catch { $result.routeCheckError = $_.Exception.Message }
 
@@ -135,6 +146,42 @@ try {
   }
   catch { $result.moveCheckError = $_.Exception.Message }
 
+  try {
+    $result.containerMoveChecks = @()
+    $containers = @($plan.nodes | Where-Object { $_.kind -eq 'container' })
+    if ($containers.Count) {
+      # StructureBasic preserves existing membership; default COM services are disabled.
+      $doc.DiagramServicesEnabled = 2
+      $nodePlans = @{}; foreach ($n in $plan.nodes) { $nodePlans[[string]$n.id]=$n }
+      foreach ($n in $plan.nodes) {
+        if($n.parent -and (-not $nodePlans.ContainsKey([string]$n.parent) -or $nodePlans[[string]$n.parent].kind -ne 'container')){throw "Invalid parent in planned JSON: $($n.id)"}
+      }
+      foreach ($containerPlan in $containers) {
+        $before = @{}
+        foreach ($n in $plan.nodes) { $before[[string]$n.id]=[double]$pg.Shapes.ItemU("node_$($n.id)").CellsU('PinX').ResultIU }
+        $containerShape=$pg.Shapes.ItemU("node_$($containerPlan.id)")
+        $selection=$pg.CreateSelection(0);$selection.Select($containerShape,2);$selection.Move(0.3,0)
+        $descendants=0
+        foreach ($n in $plan.nodes) {
+          $current=[string]$n.id;$affected=$current -eq $containerPlan.id
+          $visited=@{}
+          while ($nodePlans[$current].parent) {
+            if($visited.ContainsKey($current)){throw 'Cycle in planned container hierarchy'}
+            $visited[$current]=$true
+            $current=[string]$nodePlans[$current].parent
+            if($current -eq $containerPlan.id){$affected=$true}
+          }
+          $expected=if($affected){0.3}else{0.0}
+          $actual=[double]$pg.Shapes.ItemU("node_$($n.id)").CellsU('PinX').ResultIU-$before[[string]$n.id]
+          if([Math]::Abs($actual-$expected) -gt 0.001){throw "Container movement mismatch: $($containerPlan.id) -> $($n.id)"}
+          if($affected -and $n.id -ne $containerPlan.id){$descendants++}
+        }
+        $selection.Move(-0.3,0)
+        $result.containerMoveChecks+=@{id=$containerPlan.id;descendantsChecked=$descendants;deltaIn=0.3;status='PASS'}
+      }
+    }
+  } catch { $result.containerMoveCheckError=$_.Exception.Message }
+
   $doc.Saved = $true; $doc.Close(); $doc = $null
 }
 catch {
@@ -151,6 +198,7 @@ $why = @()
 if ($result.error) { $ok = $false; $why += "error: $($result.error)" }
 if ($result.routeCheckError) { $ok = $false; $why += "route check: $($result.routeCheckError)" }
 if ($result.moveCheckError)  { $ok = $false; $why += "move check: $($result.moveCheckError)" }
+if ($result.containerMoveCheckError) { $ok=$false; $why+="container movement: $($result.containerMoveCheckError)" }
 if ($null -eq $result.shapes -or $result.shapes -ne $result.expectedShapes) { $ok = $false; $why += 'shape count missing or incorrect' }
 if ($null -eq $result.routeVerticesChecked -or $result.routeVerticesChecked -ne $result.expectedRouteVertices) { $ok = $false; $why += 'route coverage incomplete' }
 if ($result.expectedConnects -gt 0 -and $null -eq $result.moveDeltaIn) { $ok = $false; $why += 'move test missing' }

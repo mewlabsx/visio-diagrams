@@ -122,7 +122,7 @@ class NativeEntryTests(unittest.TestCase):
     def test_writer_runs_from_relocated_skill_without_source_template(self):
         relocated = self.out.parent/'relocated'
         (relocated/'scripts').mkdir(parents=True)
-        for name in ('render_native.py','vsdx_writer.py','local_layout.py','plan_routes.py'):
+        for name in ('render_native.py','vsdx_writer.py','local_layout.py','plan_routes.py','containers.py'):
             shutil.copyfile(ROOT/'scripts'/name, relocated/'scripts'/name)
         shutil.copytree(ROOT/'assets'/'vsdx-base', relocated/'assets'/'vsdx-base')
         result = subprocess.run([sys.executable, '-X', 'utf8', str(relocated/'scripts'/'render_native.py'),
@@ -130,6 +130,24 @@ class NativeEntryTests(unittest.TestCase):
                                 capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue(self.out.is_file())
+
+    def test_nested_containers_write_reciprocal_native_relationships(self):
+        spec=self.fixture('nested-architecture-example')
+        render(spec,self.out)
+        page=self.package()
+        shapes={s.get('NameU')[5:]:s for s in page.findall('v:Shapes/v:Shape',NS) if s.get('NameU','').startswith('node_')}
+        for node in spec['nodes']:
+            shape=shapes[node['id']]
+            relation=shape.find("v:Cell[@N='Relationships']",NS)
+            if node.get('parent'):
+                parent_id=shapes[node['parent']].get('ID')
+                self.assertIn(f'DEPENDSON(4,Sheet.{parent_id}!SheetRef())',relation.get('F'))
+                parent_rel=shapes[node['parent']].find("v:Cell[@N='Relationships']",NS).get('F')
+                self.assertIn(f'Sheet.{shape.get("ID")}!SheetRef()',parent_rel)
+            if node.get('kind')=='container':
+                marker=shape.find("v:Section[@N='User']/v:Row[@N='msvStructureType']/v:Cell[@N='Value']",NS)
+                self.assertEqual(marker.get('V'),'Container')
+                self.assertIsNone(shape.find('v:Shapes',NS))
 
 
 if __name__ == '__main__':

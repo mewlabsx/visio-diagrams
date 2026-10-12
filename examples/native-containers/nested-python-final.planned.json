@@ -1,0 +1,471 @@
+{
+  "page": {
+    "width": 18,
+    "height": 11,
+    "title": "原生三层嵌套容器与复杂架构自动排线"
+  },
+  "nodes": [
+    {
+      "id": "root",
+      "kind": "container",
+      "text": "测试平台",
+      "fill": "#F3F6FA",
+      "x": 3.2,
+      "y": 1.1,
+      "w": 12.25,
+      "h": 7.450000000000001,
+      "padding": 0.25,
+      "headerHeight": 0.45
+    },
+    {
+      "id": "control",
+      "kind": "container",
+      "text": "管理层",
+      "parent": "root",
+      "fill": "#E8F1FA",
+      "x": 3.45,
+      "y": 1.8,
+      "w": 2.8999999999999995,
+      "h": 6.05,
+      "padding": 0.25,
+      "headerHeight": 0.45
+    },
+    {
+      "id": "worker",
+      "kind": "container",
+      "text": "执行层",
+      "parent": "root",
+      "fill": "#EAF4E4",
+      "x": 7.9,
+      "y": 1.8,
+      "w": 7.300000000000001,
+      "h": 6.500000000000001,
+      "padding": 0.25,
+      "headerHeight": 0.45
+    },
+    {
+      "id": "services",
+      "kind": "container",
+      "text": "服务分组",
+      "parent": "worker",
+      "fill": "#FFF4DE",
+      "x": 8.15,
+      "y": 4.5,
+      "w": 6.800000000000001,
+      "h": 3.5500000000000007,
+      "padding": 0.25,
+      "headerHeight": 0.45
+    },
+    {
+      "id": "client",
+      "text": "客户端",
+      "x": 0.5,
+      "y": 3,
+      "w": 1.5,
+      "h": 0.8,
+      "fontSize": 11
+    },
+    {
+      "id": "api",
+      "text": "管理 API",
+      "x": 3.7,
+      "y": 2.5,
+      "w": 2.4,
+      "h": 3.2,
+      "fontSize": 11,
+      "parent": "control"
+    },
+    {
+      "id": "controller",
+      "text": "协调器",
+      "x": 3.7,
+      "y": 6.6,
+      "w": 2.4,
+      "h": 1,
+      "fontSize": 11,
+      "parent": "control"
+    },
+    {
+      "id": "agent",
+      "text": "执行代理",
+      "x": 8.4,
+      "y": 2.5,
+      "w": 2.4,
+      "h": 1,
+      "fontSize": 11,
+      "parent": "worker"
+    },
+    {
+      "id": "runtime",
+      "text": "执行引擎",
+      "x": 12.3,
+      "y": 2.5,
+      "w": 2.4,
+      "h": 1,
+      "fontSize": 11,
+      "parent": "worker"
+    },
+    {
+      "id": "a",
+      "text": "服务 A",
+      "x": 8.4,
+      "y": 5.2,
+      "w": 2.4,
+      "h": 0.8,
+      "fontSize": 11,
+      "parent": "services"
+    },
+    {
+      "id": "b",
+      "text": "服务 B",
+      "x": 12.3,
+      "y": 5.2,
+      "w": 2.4,
+      "h": 0.8,
+      "fontSize": 11,
+      "parent": "services"
+    },
+    {
+      "id": "c",
+      "text": "服务 C",
+      "x": 10.35,
+      "y": 7.0,
+      "w": 2.4,
+      "h": 0.8,
+      "fontSize": 11,
+      "parent": "services"
+    }
+  ],
+  "edges": [
+    {
+      "from": "client",
+      "to": "api",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "请求",
+      "routePoints": [
+        [
+          2.0,
+          3.4
+        ],
+        [
+          3.58,
+          3.4
+        ],
+        [
+          3.58,
+          4.1
+        ],
+        [
+          3.7,
+          4.1
+        ]
+      ],
+      "label": {
+        "x": 2.59,
+        "y": 3.05,
+        "w": 0.4,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "controller",
+      "to": "api",
+      "fromPort": "top",
+      "toPort": "bottom",
+      "text": "协调",
+      "toFraction": 0.05,
+      "routePoints": [
+        [
+          4.9,
+          6.6
+        ],
+        [
+          4.9,
+          5.82
+        ],
+        [
+          3.8200000000000003,
+          5.82
+        ],
+        [
+          3.8200000000000003,
+          5.7
+        ]
+      ],
+      "label": {
+        "x": 4.16,
+        "y": 5.930000000000001,
+        "w": 0.4,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "api",
+      "to": "agent",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "分派",
+      "fromFraction": 0.0375,
+      "routePoints": [
+        [
+          6.1,
+          2.62
+        ],
+        [
+          8.280000000000001,
+          2.62
+        ],
+        [
+          8.280000000000001,
+          3
+        ],
+        [
+          8.4,
+          3
+        ]
+      ],
+      "label": {
+        "x": 6.99,
+        "y": 2.27,
+        "w": 0.4,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "api",
+      "to": "runtime",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "分派",
+      "fromFraction": 0.3458333333333333,
+      "toFraction": 0.88,
+      "routePoints": [
+        [
+          6.1,
+          3.6066666666666665
+        ],
+        [
+          8.280000000000001,
+          3.6066666666666665
+        ],
+        [
+          8.280000000000001,
+          3.62
+        ],
+        [
+          12.180000000000001,
+          3.62
+        ],
+        [
+          12.180000000000001,
+          3.38
+        ],
+        [
+          12.3,
+          3.38
+        ]
+      ],
+      "label": {
+        "x": 10.030000000000001,
+        "y": 3.73,
+        "w": 0.4,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "api",
+      "to": "a",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "分派",
+      "fromFraction": 0.6541666666666666,
+      "routePoints": [
+        [
+          6.1,
+          4.593333333333334
+        ],
+        [
+          8.030000000000001,
+          4.593333333333334
+        ],
+        [
+          8.030000000000001,
+          5.6000000000000005
+        ],
+        [
+          8.4,
+          5.6000000000000005
+        ]
+      ],
+      "label": {
+        "x": 6.865,
+        "y": 4.243333333333333,
+        "w": 0.4,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "api",
+      "to": "b",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "分派",
+      "fromFraction": 0.9624999999999998,
+      "routePoints": [
+        [
+          6.1,
+          5.58
+        ],
+        [
+          8.280000000000001,
+          5.58
+        ],
+        [
+          8.280000000000001,
+          5.08
+        ],
+        [
+          11.55,
+          5.08
+        ],
+        [
+          11.55,
+          5.6000000000000005
+        ],
+        [
+          12.3,
+          5.6000000000000005
+        ]
+      ],
+      "label": {
+        "x": 6.99,
+        "y": 5.2299999999999995,
+        "w": 0.4,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "agent",
+      "to": "runtime",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "调用",
+      "toFraction": 0.12,
+      "routePoints": [
+        [
+          10.8,
+          3
+        ],
+        [
+          12.180000000000001,
+          3
+        ],
+        [
+          12.180000000000001,
+          2.62
+        ],
+        [
+          12.3,
+          2.62
+        ]
+      ],
+      "label": {
+        "x": 11.290000000000003,
+        "y": 2.65,
+        "w": 0.4,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "runtime",
+      "to": "c",
+      "fromPort": "bottom",
+      "toPort": "right",
+      "text": "执行",
+      "routePoints": [
+        [
+          13.5,
+          3.5
+        ],
+        [
+          13.5,
+          4.38
+        ],
+        [
+          15.07,
+          4.38
+        ],
+        [
+          15.07,
+          7.4
+        ],
+        [
+          12.75,
+          7.4
+        ]
+      ],
+      "label": {
+        "x": 15.3,
+        "y": 5.7700000000000005,
+        "w": 0.4,
+        "h": 0.24
+      }
+    },
+    {
+      "from": "c",
+      "to": "api",
+      "fromPort": "left",
+      "toPort": "bottom",
+      "text": "反馈",
+      "toFraction": 0.9500000000000002,
+      "routePoints": [
+        [
+          10.35,
+          7.4
+        ],
+        [
+          7.9,
+          7.4
+        ],
+        [
+          7.9,
+          5.82
+        ],
+        [
+          5.98,
+          5.82
+        ],
+        [
+          5.98,
+          5.7
+        ]
+      ],
+      "label": {
+        "x": 8.925,
+        "y": 7.05,
+        "w": 0.4,
+        "h": 0.24
+      }
+    }
+  ],
+  "_routingValidation": {
+    "plannedEdges": 9,
+    "overlaps": 0,
+    "crossings": 1,
+    "searchStates": 8465,
+    "totalBends": 24,
+    "labelsPlaced": 9,
+    "scope": "All local routes and label rectangles checked; crossings penalized; visual QA still required",
+    "attemptsTried": 4,
+    "successfulSearchStates": 34068,
+    "attemptFailures": []
+  },
+  "_localLayout": {
+    "moves": [],
+    "initialBends": 24,
+    "status": "PASS",
+    "totalBends": 24
+  },
+  "_planningReuse": "Verified automatic routes reused unchanged after adding resize-relative text formulas"
+}

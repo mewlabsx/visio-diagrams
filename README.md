@@ -1,6 +1,6 @@
 # Visio 技术方案制图 / visio-diagrams
 
-**v0.1.0-preview.1 · 可编辑 VSDX 生成技能预览版**
+**v0.2.0-dev.2 · 开发预览版**
 
 把中文技术需求整理为可编辑的 Visio 图。默认 Python 直接写入 VSDX：原生形状、
 基本流程母版、真正胶合的连接线，以及可复查的生成报告。适合人工组织的架构、
@@ -12,8 +12,8 @@
 
 ## 安装和使用
 
-从 [GitHub Release](https://github.com/mewlabsx/visio-diagrams/releases/tag/v0.1.0-preview.1)
-下载 `visio-diagrams-v0.1.0-preview.1.zip`，把包中的 `visio-diagrams/` 解压到
+从 [GitHub Release](https://github.com/mewlabsx/visio-diagrams/releases/tag/v0.2.0-dev.2)
+下载 `visio-diagrams-v0.2.0-dev.2.zip`，把包中的 `visio-diagrams/` 解压到
 当前 Agent 的 skills 目录。例如 Codex 的用户目录是 `~/.codex/skills/`。
 也可将本仓库克隆为 skills 目录中的 `visio-diagrams` 文件夹。
 
@@ -39,12 +39,14 @@ COM 自动化可能阻塞，请在受限时长的外层进程中执行。旧 COM
 
 - 支持基本矩形、菱形、开始/结束、椭圆、文字与原生连接线；固定字号，优先重排而非缩字。
 - 支持显式成组排线、受限局部调整、两列折排、人工固定路线与离线几何检查。
-- Python 尚不支持容器、原生成员关系、泳道或任意复杂母版；完整 UML 生成尚未验证。
+- 当前开发版支持显式 parent 的原生嵌套容器与派生几何；仍无泳道、任意复杂母版或完整 UML。旧版 0.1 包不含此能力。
 - 局部规划器上限为 40 节点 / 80 连线；复杂架构可能需要人工位置和路线。
 - GENERATED、离线 structure.PASS、真实 Visio 验收、视觉审查分别报告。
 - 字号按输入写入；尚无最终插图宽高与有效字号的自动检查，大图不应直接缩入 A4 正文。
 - 仅在本机 Visio 环境验证过所列样例，跨版本兼容与任意编辑行为仍待验证。
 - Archify 集成保留为实验性入口，不包含 Archify，不计入完整通过的能力声明。
+
+图型识别、需求澄清、重复结构及局部让步规则见 [diagram-planning.md](references/diagram-planning.md)。这是 Agent 工作流更新，不代表新增矩阵/模板自动布局或时序/泳道生成后端。
 
 规则见 [SKILL.md](SKILL.md)，输入与后端细节见
 [schema.md](references/schema.md) 和 [python-backend.md](references/python-backend.md)。
@@ -55,7 +57,7 @@ COM 自动化可能阻塞，请在受限时长的外层进程中执行。旧 COM
 python -X utf8 -m unittest discover -s scripts -p "test_*.py"
 ```
 
-本机 55 项回归测试通过，未跳过。部分写入器测试需本地 VSSX；资源缺失时跳过，
+当前开发版本机 71 项回归测试通过，未跳过；另有三层容器与 25 节点/37 条自动路线样例真实验收。部分写入器测试需本地 VSSX；资源缺失时跳过，
 不能把跳过描述成已验证。六类基础样例与两张复杂 Kubernetes 图已做本机 Visio
 真实验收和预览检查；代表节点移动测试不覆盖所有编辑场景。
 
@@ -69,6 +71,9 @@ flowchart VSSX resource, but does not start Office during generation. Windows de
 required for native acceptance checks and PNG export. Stencils and fonts are not distributed.
 
 It supports basic shapes, glued connectors, explicit grouped routes, bounded local layout and
-authored fixed routes. It is not a general automatic diagram layout engine. Native containers,
-swimlanes, arbitrary complex masters and cross-version guarantees are not implemented or accepted.
+authored fixed routes. It is not a general automatic diagram layout engine. The 0.2 development preview adds explicit
+native containment and bounded shared-port routing; the published 0.1 package does not include them.
+Swimlanes, arbitrary complex masters and cross-version guarantees are not implemented or accepted.
 Generation, structural checks, Visio acceptance and visual review are separate evidence layers.
+
+新规划规则完成16组作者场景自检，尚未独立Agent前向验证或真实提问工具交互；71项渲染回归不代替规则交互验证。见 [规则走查](https://github.com/mewlabsx/visio-diagrams/blob/v0.2.0-dev.2/examples/planning-policy/acceptance.md)。

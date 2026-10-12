@@ -7,8 +7,7 @@ UTF-8，单位英寸，节点坐标 x/y 为左上角，y 从页顶向下。不�
 默认 Python 后端的资源、母版范围和证据状态见 [python-backend.md](python-backend.md)。
 下文的动态中心胶合、自动路由、自绘降级及原生打开报告描述旧 COM 后端。
 Python 对未规划边使用指定端口间直线，端口省略时为 from bottom / to top；
-不保证自动避障，报告用 unplannedEdges 标明数量。Python 拒绝 container 与复杂母版，
-需要这些旧能力时显式指定 `-Backend com`。
+不保证自动避障，报告用 unplannedEdges 标明数量。Python 支持显式 parent 的原生 container，仍拒绝任意复杂母版；旧视觉边界且未声明成员的输入使用 `-Backend com`。
 Python 与 COM 均保留输入字号；长图应根据最终可用宽高决定扩页、重排或拆图。
 当前还没有自动化最终插入宽高与有效字号检查，不得宣称已经保证大图可读性。
 
@@ -26,7 +25,7 @@ kind 另支持 terminator：开始/结束胶囊形圆角框（矩形直边、半
 
 routingGroups.<名称>.optimizeLayout 可设 {"moveNode":"b","maxShift":1.4}，启用单个线组、一个共享矩形节点对的局部直连优化。节点两端必须使用面对的左右或上下一对端口；两端不得参与其他连线。移动仅沿端口分布方向（左右端口移动 y，上下端口移动 x），不超过 maxShift，检查页边界、节点碰撞和候选直线路径；共同投影需容纳端点留白及 (线数-1)×spacing。无可行直连时保持原位置并回退固定通道。容器归属、固定标签的随动、UML 约束及一般关联关系不自动处理；需要这些约束的节点不要开启此模式。示例见 assets/layout-optimized-example.json；实际位移和结果在 planned.json 与 validation.json 中记录。
 
-nodes 数组：id 唯一且非空；text 字符串；x/y 非负；w/h 正数且节点完全在页内。kind 为 box（默认）、container、text、ellipse、diamond。可选 fill 为 #RRGGBB、fontSize 为正 pt、bold 为布尔值、dashed 为布尔值。container 只是视觉边界，子节点仍是独立形状，不是 Visio 原生容器成员关系；需要分组/原生容器时不能声称脚本已实现。
+nodes 数组：id 唯一且非空；text 字符串；x/y 非负；w/h 正数且节点完全在页内。kind 为 box（默认）、container、text、ellipse、diamond。可选 fill 为 #RRGGBB、fontSize 为正 pt、bold 为布尔值、dashed 为布尔值。Python 中 kind=container 使用原生成员关系；子节点 parent 指向容器 ID，容器 padding/headerHeight 与子节点包围盒决定 x/y/w/h。不要用 children 或按位置隐式归属。COM 旧路线中的 container 仍仅是视觉边界。
 
 先列容器，再列节点，以保证绘制层次。容器标题默认顶部；普通节点文字居中。长标签主动加 \n 换行。
 
@@ -36,4 +35,4 @@ edges 数组：from/to 引用节点 id；text 可选；dashed 可选；label 可
 
 可选 fromPort / toPort：top、bottom、left、right。指定后通过 GlueToPos 胶合到对应边中点（菱形为顶点，椭圆为轴端）；未指定时使用中心动态胶合。流程图应显式指定两端的 port，并对照预览确认正交路由。
 
-限制：单页，无图片导入或现有图无损导入，无原生分组/容器成员，无泳道。母版通过已安装模具或显式 stencilPath 投放；不支持任意位置的手写端口（分组均分端口由规划器生成）。支持基本几何和连接线，不等同完整 Visio 功能。所有业务关系在生成前检查。
+限制：单页，无图片导入或现有图无损导入；Python 有原生容器成员但不是 group 子形状，无泳道。母版通过已安装模具或显式 stencilPath 投放；不支持任意位置的手写端口（分组均分端口由规划器生成）。支持基本几何和连接线，不等同完整 Visio 功能。所有业务关系在生成前检查。

@@ -11,6 +11,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 from vsdx_writer import STENCIL, write_vsdx
+from containers import prepare
 
 
 def check_package(path, spec):
@@ -53,7 +54,7 @@ def render(spec, output, color_fill='spec', stencil=None):
     for path in (output, planned_path, report_path):
         if path.exists():
             raise FileExistsError('Refusing to overwrite: ' + str(path))
-    work = copy.deepcopy(spec)
+    work = prepare(spec)
     use_color = work['page'].get('colorFill', True)
     if not isinstance(use_color, bool):
         raise ValueError('page.colorFill must be boolean')

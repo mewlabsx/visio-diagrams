@@ -3,15 +3,18 @@ import argparse,copy,heapq,json,math
 from collections import defaultdict,deque
 from pathlib import Path
 from plan_routes import point,simplify,segments,overlap
+from containers import prepare,hierarchy,related,obstacles
 
 def topology(s):return [(e['from'],e['to'],e.get('text','')) for e in s['edges']]
 def solids(s):return [n for n in s['nodes'] if n.get('kind') not in ('container','text')]
 def placement_ok(s,gap):
- ns=solids(s)
+ s=prepare(s);ns=s['nodes'];_,_,_,ancestors=hierarchy(s)
  for n in ns:
   if n['x']<0 or n['y']<0 or n['x']+n['w']>s['page']['width'] or n['y']+n['h']>s['page']['height']:return False
+  if n.get('kind')=='container' and s['page'].get('title') and n['y']<.65:return False
  for i,a in enumerate(ns):
   for b in ns[i+1:]:
+   if related(a,b,ancestors):continue
    if min(a['x']+a['w']+gap,b['x']+b['w']+gap)>max(a['x'],b['x']) and min(a['y']+a['h']+gap,b['y']+b['h']+gap)>max(a['y'],b['y']):return False
  return True
 
@@ -19,6 +22,7 @@ def propagate(s,id,axis,delta,cfg):
  """Explicit dependency order: all later nodes translate equally, never backwards."""
  trial=copy.deepcopy(s);ns={n['id']:n for n in trial['nodes']};order=cfg['order']
  if len(set(order))!=len(order) or id not in order or any(i not in ns for i in order):raise ValueError('Invalid propagation order')
+ if any(ns[i].get('kind')=='container' for i in order):raise ValueError('Adjustment order must name leaf nodes, not derived containers')
  if axis not in ('x','y') or not math.isfinite(delta):raise ValueError('Invalid displacement')
  graph=defaultdict(list)
  for e in s['edges']:graph[e['from']].append(e['to'])
@@ -40,7 +44,7 @@ def fold(s,cfg):
  if len(set(path))!=len(path) or any(id not in ns for id in path):raise ValueError('Invalid mainPath')
  links={(e['from'],e['to']) for e in trial['edges']}
  if any((a,b) not in links for a,b in zip(path,path[1:])):raise ValueError('mainPath order is not supported by edges')
- if any(n.get('kind')=='container' or n.get('fixed') for n in trial['nodes']):raise ValueError('Fold does not support containers or fixed nodes')
+ if any(n.get('fixed') for n in trial['nodes']):raise ValueError('Fold does not support fixed nodes')
  centers=[ns[id]['x']+ns[id]['w']/2 for id in path]
  vertical=max(centers)-min(centers)<cfg.get('columnTolerance',.5)
  if cfg.get('mode','auto')=='auto' and (not vertical or len(path)<cfg.get('minNodes',8)):
@@ -49,7 +53,7 @@ def fold(s,cfg):
  choices=[k for k in range(2,len(path)-1) if ns[path[k-1]].get('kind')!='diamond' and ns[path[k]].get('kind')!='diamond']
  if not choices:raise ValueError('No safe midpoint split')
  k=min(choices,key=lambda k:abs(k-len(path)/2));anchors=cfg.get('branchAnchors',{})
- extras=set(ns)-set(path)
+ extras={id for id in ns if ns[id].get('kind')!='container'}-set(path)
  if extras-set(anchors):raise ValueError('Every off-main node needs a branchAnchor')
  original=copy.deepcopy(ns);width=max(ns[id]['w'] for id in path)
  for col,ids in enumerate((path[:k],path[k:])):
@@ -60,6 +64,7 @@ def fold(s,cfg):
   if id not in extras or parent not in path:raise ValueError('Invalid branch anchor')
   ns[id]['x']=ns[parent]['x']+original[id]['x']-original[parent]['x']
   ns[id]['y']=ns[parent]['y']+original[id]['y']-original[parent]['y']
+ trial=prepare(trial);ns={n['id']:n for n in trial['nodes']}
  trial['page']['width']=max(n['x']+n['w'] for n in ns.values())+.6
  trial['page']['height']=max(n['y']+n['h'] for n in ns.values())+1
  if not placement_ok(trial,cfg.get('minGap',.15)):raise ValueError('Fold violates node spacing; adjust columnPitch/branch offsets')
@@ -77,11 +82,11 @@ def crosses_node(a,b,n):
  if abs(a[0]-b[0])<eps:return x+eps<a[0]<x+w-eps and min(max(a[1],b[1]),y+h)-max(min(a[1],b[1]),y)>eps
  return y+eps<a[1]<y+h-eps and min(max(a[0],b[0]),x+w)-max(min(a[0],b[0]),x)>eps
 
-def route_all(s,cfg):
+def _route_once(s,cfg):
+ s=prepare(s)
  if len(s['nodes'])>40 or len(s['edges'])>80:raise ValueError('Local solver supports at most 40 nodes and 80 edges')
- if any(n.get('kind') in ('container','text') for n in s['nodes']):raise ValueError('Local solver does not yet support containers or preplaced text nodes')
  if not placement_ok(s,0):raise ValueError('Original placement overlaps or exceeds page')
- result=copy.deepcopy(s);ns={n['id']:n for n in solids(s)};clear=cfg.get('clearance',.18)
+ result=copy.deepcopy(s);ns={n['id']:n for n in solids(s)};obs=obstacles(s);clear=cfg.get('clearance',.18)
  if clear<=0 or not math.isfinite(clear) or cfg.get('bendPenalty',2)<0 or cfg.get('crossingPenalty',4)<0 or cfg.get('maxStates',80000)<1:raise ValueError('Invalid routing budget or cost')
  if any(e['from'] not in ns or e['to'] not in ns for e in s['edges']):raise ValueError('All routed endpoints must be solid nodes')
  def sides(e):
@@ -93,15 +98,34 @@ def route_all(s,cfg):
   for end in ('from','to'):
    used[(e[end],e[end+'Port'])]+=1
  # Refuse multi-line shared port until explicit legal port spreading is provided.
- if any(count>1 for count in used.values()):raise ValueError('Shared endpoint ports: specify distinct fromPort/toPort before local routing')
+ groups=defaultdict(list)
+ for e in result['edges']:
+  for end in ('from','to'):groups[(e[end],e[end+'Port'])].append((e,end))
+ for (id,side),items in groups.items():
+  if len(items)<2:continue
+  if not cfg.get('spreadPorts',False):raise ValueError('Shared endpoint ports: enable spreadPorts or specify distinct sides')
+  if (ns[id].get('kind') or 'box')!='box' or any(e.get('fixedRoute') for e,end in items):raise ValueError('Port spreading requires unfixed rectangle routes')
+  length=ns[id]['h' if side in ('left','right') else 'w'];margin=cfg.get('portMargin',.12);spacing=cfg.get('minPortSpacing',.12)
+  if not all(isinstance(v,(int,float)) and math.isfinite(v) and v>0 for v in (margin,spacing)) or length-2*margin<(len(items)-1)*spacing:raise ValueError('Insufficient endpoint space')
+  axis='y' if side in ('left','right') else 'x'
+  items.sort(key=lambda item:(ns[item[0]['to' if item[1]=='from' else 'from']][axis],item[0]['from'],item[0]['to']))
+  for rank,(e,end) in enumerate(items):e[end+'Fraction']=(margin+rank*(length-2*margin)/(len(items)-1))/length
  xs={.25,s['page']['width']-.25};ys={.7,s['page']['height']-.25}
- for n in ns.values():
+ lanes=cfg.get('channelLanes',1);lane_spacing=cfg.get('channelSpacing',.12)
+ if not isinstance(lanes,int) or isinstance(lanes,bool) or not 1<=lanes<=6 or not isinstance(lane_spacing,(int,float)) or not math.isfinite(lane_spacing) or lane_spacing<=0:raise ValueError('Invalid channel lane configuration')
+ for n in obs:
   xs.update([n['x']-clear,n['x'],n['x']+n['w']/2,n['x']+n['w'],n['x']+n['w']+clear])
   ys.update([n['y']-clear,n['y'],n['y']+n['h']/2,n['y']+n['h'],n['y']+n['h']+clear])
+  for rank in range(1,lanes):
+   offset=clear+rank*lane_spacing
+   xs.update([n['x']-offset,n['x']+n['w']+offset]);ys.update([n['y']-offset,n['y']+n['h']+offset])
+ for e in result['edges']:
+  for end in ('from','to'):
+   p=point(ns[e[end]],e[end+'Port'],e.get(end+'Fraction',.5));xs.add(p[0]);ys.add(p[1])
  xs=sorted(x for x in xs if 0<=x<=s['page']['width']);ys=sorted(y for y in ys if .6<=y<=s['page']['height'])
  reserved=[];states=0;limit=cfg.get('maxStates',80000);crossings=0
  for e in sorted(result['edges'],key=lambda e:not bool(e.get('fixedRoute'))):
-  a=point(ns[e['from']],e['fromPort']);b=point(ns[e['to']],e['toPort'])
+  a=point(ns[e['from']],e['fromPort'],e.get('fromFraction',.5));b=point(ns[e['to']],e['toPort'],e.get('toFraction',.5))
   if e.get('fixedRoute'):
    pts=e['fixedRoute']
    if not ns[e['from']].get('fixed') or not ns[e['to']].get('fixed'):raise ValueError('fixedRoute requires fixed endpoint nodes')
@@ -109,7 +133,7 @@ def route_all(s,cfg):
    if any(len(p)!=2 or any(not math.isfinite(v) for v in p) or not 0<=p[0]<=s['page']['width'] or not .6<=p[1]<=s['page']['height'] for p in pts):raise ValueError('Invalid fixedRoute point')
    path=list(segments(pts))
    if any(overlap(a,b,c,d) for i,(a,b) in enumerate(path) for c,d in path[i+1:]):raise ValueError('fixedRoute self overlap')
-   if any(crosses_node(c,d,n) for c,d in path for n in ns.values()) or any(overlap(c,d,f,g) for c,d in path for f,g in reserved):raise ValueError('fixedRoute collision')
+   if any(crosses_node(c,d,n) for c,d in path for n in obs) or any(overlap(c,d,f,g) for c,d in path for f,g in reserved):raise ValueError('fixedRoute collision')
    for side,p,q in ((e['fromPort'],pts[0],pts[1]),(e['toPort'],pts[-1],pts[-2])):
     if not {'right':q[0]>p[0] and q[1]==p[1],'left':q[0]<p[0] and q[1]==p[1],'top':q[1]<p[1] and q[0]==p[0],'bottom':q[1]>p[1] and q[0]==p[0]}[side]:raise ValueError('fixedRoute must leave endpoint outward')
    e['routePoints']=simplify(pts);reserved.extend(path);continue
@@ -130,7 +154,7 @@ def route_all(s,cfg):
     if (ni,nj)==end:
      side=e['toPort']
      if (side=='right' and not(p[0]>q[0] and axis=='h')) or (side=='left' and not(p[0]<q[0] and axis=='h')) or (side=='top' and not(p[1]<q[1] and axis=='v')) or (side=='bottom' and not(p[1]>q[1] and axis=='v')):continue
-    if any(crosses_node(p,q,n if id in (e['from'],e['to']) else dict(n,x=n['x']-clear,y=n['y']-clear,w=n['w']+2*clear,h=n['h']+2*clear)) for id,n in ns.items()) or any(overlap(p,q,c,d) for c,d in reserved):continue
+    if any(crosses_node(p,q,n if n['id'] in (e['from'],e['to']) else dict(n,x=n['x']-clear,y=n['y']-clear,w=n['w']+2*clear,h=n['h']+2*clear)) for n in obs) or any(overlap(p,q,c,d) for c,d in reserved):continue
     cross=sum(1 for c,d in reserved if (p[1]==q[1] and c[0]==d[0] and min(p[0],q[0])<c[0]<max(p[0],q[0]) and min(c[1],d[1])<p[1]<max(c[1],d[1])) or (p[0]==q[0] and c[1]==d[1] and min(p[1],q[1])<c[1]<max(p[1],q[1]) and min(c[0],d[0])<p[0]<max(c[0],d[0])))
     nc=cost+abs(p[0]-q[0])+abs(p[1]-q[1])+(cfg.get('bendPenalty',2) if direction and direction!=axis else 0)+cross*cfg.get('crossingPenalty',4)
     nextstate=((ni,nj),axis)
@@ -155,7 +179,7 @@ def route_all(s,cfg):
      else:cy+=offset
      box={'x':cx-w/2,'y':cy-h/2,'w':w,'h':h}
      if box['x']<0 or box['y']<.65 or box['x']+w>s['page']['width'] or box['y']+h>s['page']['height']:continue
-     if any(min(box['x']+w,n['x']+n['w'])>max(box['x'],n['x']) and min(box['y']+h,n['y']+n['h'])>max(box['y'],n['y']) for n in list(ns.values())+labels):continue
+     if any(min(box['x']+w,n['x']+n['w'])>max(box['x'],n['x']) and min(box['y']+h,n['y']+n['h'])>max(box['y'],n['y']) for n in obs+labels):continue
      if any(crosses_node(c,d,box) for c,d in reserved):continue
      found=box;break
     if found:break
@@ -166,10 +190,36 @@ def route_all(s,cfg):
  result['_routingValidation']={'plannedEdges':len(result['edges']),'overlaps':0,'crossings':crossings,'searchStates':states,'totalBends':sum(len(e['routePoints'])-2 for e in result['edges']),'labelsPlaced':len(labels),'scope':'All local routes and label rectangles checked; crossings penalized; visual QA still required'}
  return result
 
+def route_all(s,cfg):
+ attempts=cfg.get('routeAttempts',1)
+ if not isinstance(attempts,int) or isinstance(attempts,bool) or not 1<=attempts<=4:raise ValueError('routeAttempts must be 1..4')
+ max_cross=cfg.get('maxCrossings')
+ if max_cross is not None and (not isinstance(max_cross,int) or isinstance(max_cross,bool) or max_cross<0):raise ValueError('Invalid maxCrossings')
+ seed=copy.deepcopy(s);nodes={n['id']:n for n in solids(seed)}
+ for index,e in enumerate(seed['edges']):e['__routeIndex']=index
+ def distance(e):
+  a,b=nodes[e['from']],nodes[e['to']]
+  return abs(a['x']-b['x'])+abs(a['y']-b['y'])
+ orders=[seed['edges'],list(reversed(seed['edges'])),sorted(seed['edges'],key=distance),sorted(seed['edges'],key=distance,reverse=True)]
+ best=None;errors=[];states=0
+ for index,order in enumerate(orders[:attempts]):
+  trial=copy.deepcopy(seed);trial['edges']=order
+  try:
+   result=_route_once(trial,cfg);info=result['_routingValidation'];states+=info['searchStates']
+   if max_cross is not None and info['crossings']>max_cross:raise ValueError('Crossing limit exceeded')
+   if best is None or (info['crossings'],info['totalBends'])<(best['_routingValidation']['crossings'],best['_routingValidation']['totalBends']):best=result
+   if info['crossings']==0:break
+  except ValueError as error:errors.append(str(error))
+ if best is None:raise ValueError('Routing attempts failed: '+'; '.join(errors))
+ best['edges'].sort(key=lambda e:e['__routeIndex'])
+ for e in best['edges']:e.pop('__routeIndex')
+ best['_routingValidation'].update(attemptsTried=index+1,successfulSearchStates=states,attemptFailures=errors)
+ return best
+
 def _solve(s):
+ s=prepare(s)
  original=topology(s);cfg=s['localLayout'];work=copy.deepcopy(s);receipt={'moves':[]}
  if len(s['nodes'])>40 or len(s['edges'])>80:raise ValueError('Local solver supports at most 40 nodes and 80 edges')
- if any(n.get('kind') in ('container','text') for n in s['nodes']):raise ValueError('Local solver does not yet support containers or preplaced text nodes')
  if cfg.get('fold') and cfg.get('adjust'):raise ValueError('Fold and local adjustment must run in separate requests')
  if cfg.get('fold'):work,receipt['fold']=fold(work,cfg['fold'])
  baseline=route_all(work,cfg.get('routing',{}));score=baseline['_routingValidation']['totalBends']
@@ -190,7 +240,7 @@ def _solve(s):
       if any(directions.get((id,axis),sign)!=sign for id in affected):continue
       # Cumulative movement remains inside the configured bounds.
       initial={n['id']:n for n in s['nodes']}
-      if any(abs(n[k]-initial[n['id']][k])>adj['maxShift']+1e-9 for n in trial['nodes'] for k in ('x','y')):continue
+      if any(abs(n[k]-initial[n['id']][k])>adj['maxShift']+1e-9 for n in trial['nodes'] if n.get('kind')!='container' for k in ('x','y')):continue
       try:planned=route_all(trial,cfg.get('routing',{}))
       except ValueError:continue
       newscore=planned['_routingValidation']['totalBends']

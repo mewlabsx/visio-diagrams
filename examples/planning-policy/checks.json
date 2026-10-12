@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0-dev.2",
+  "skill_format": "PASS",
+  "local_reference_links": {
+    "status": "PASS",
+    "checked": 15
+  },
+  "asset_json_syntax": "PASS",
+  "regression_tests": {
+    "passed": 71,
+    "skipped": 0
+  },
+  "scenario_self_review": {
+    "cases": 16,
+    "independent": false
+  },
+  "real_agent_interaction": "NOT_RUN",
+  "new_type_generation": "NOT_RUN",
+  "rendering_algorithm_changed": false,
+  "published": false,
+  "rule_document_sha256": "500f3d12871d809215884aff78cdd5e5ee5b296997f10c44d721d54ca8600149"
+}

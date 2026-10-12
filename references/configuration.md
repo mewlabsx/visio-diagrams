@@ -18,7 +18,7 @@
 | routing.maxStates | 80000 | 每次全线路解算的搜索状态预算；每个移动候选重新计数 |
 | routing.bendPenalty / crossingPenalty | 2 / 4 | 转折和交叉成本；不保证零交叉 |
 
-fixedRoute 是人工指定必经通道的具体方式，尚不支持只指定中间 waypoint 自动补齐。该路径检查页面、正交、节点内部穿越、端点出入方向与其他线重叠；不承诺自动线路的 clearance 缓冲。标签重新规划。局部模式不支持同侧多线端口均分，可用独立的 routeGroup 模式；两个模式不能叠加作能力承诺。
+fixedRoute 是人工指定必经通道的具体方式，尚不支持只指定中间 waypoint 自动补齐。该路径检查页面、正交、节点内部穿越、端点出入方向与其他线重叠；不承诺自动线路的 clearance 缓冲。标签重新规划。局部模式可通过 routing.spreadPorts=true 为矩形共享边均分端口；它不与 routeGroup 同时解算。
 
 ## 交付报告
 

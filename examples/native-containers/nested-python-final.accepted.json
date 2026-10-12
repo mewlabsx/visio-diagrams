@@ -1,0 +1,109 @@
+{
+  "vsdx": "nested-python-final.vsdx",
+  "planned": "nested-python-final.planned.json",
+  "status": "PASS",
+  "openMs": 686,
+  "pageWidth": 18,
+  "pageHeight": 11,
+  "shapes": 31,
+  "connects": 18,
+  "shapeSources": {
+    "(self-drawn)": 14,
+    "Process": 8,
+    "Dynamic connector": 9
+  },
+  "preview": "nested-python-final.png",
+  "plannedEdges": 9,
+  "expectedConnects": 18,
+  "expectedShapes": 31,
+  "textNodesChecked": 12,
+  "maxFontSizeDeviationPt": 1.5999983560277542e-09,
+  "expectedRouteVertices": 42,
+  "routeVerticesChecked": 42,
+  "maxRouteDeviationIn": 0,
+  "containerChecks": [
+    {
+      "auxiliaryMembers": [
+        18,
+        19,
+        20,
+        22,
+        23,
+        24,
+        25,
+        29,
+        30
+      ],
+      "members": [
+        2,
+        3
+      ],
+      "id": "root"
+    },
+    {
+      "auxiliaryMembers": [
+        16,
+        17
+      ],
+      "members": [
+        6,
+        7
+      ],
+      "id": "control"
+    },
+    {
+      "auxiliaryMembers": [
+        21,
+        26,
+        27,
+        28
+      ],
+      "members": [
+        4,
+        8,
+        9
+      ],
+      "id": "worker"
+    },
+    {
+      "auxiliaryMembers": [
+        31
+      ],
+      "members": [
+        10,
+        11,
+        12
+      ],
+      "id": "services"
+    }
+  ],
+  "moveNode": "client",
+  "moveDeltaIn": 0.3,
+  "moveExpectedIn": 0.3,
+  "containerMoveChecks": [
+    {
+      "status": "PASS",
+      "descendantsChecked": 10,
+      "id": "root",
+      "deltaIn": 0.3
+    },
+    {
+      "status": "PASS",
+      "descendantsChecked": 2,
+      "id": "control",
+      "deltaIn": 0.3
+    },
+    {
+      "status": "PASS",
+      "descendantsChecked": 6,
+      "id": "worker",
+      "deltaIn": 0.3
+    },
+    {
+      "status": "PASS",
+      "descendantsChecked": 3,
+      "id": "services",
+      "deltaIn": 0.3
+    }
+  ]
+}

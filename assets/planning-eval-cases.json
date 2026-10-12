@@ -1,0 +1,117 @@
+{
+  "purpose": "Future behavioral evaluation prompts and rubric; not runtime schema",
+  "cases": [
+    {
+      "id": "P01",
+      "prompt": "绘制20个单位的架构图。",
+      "expected_category": "clarify",
+      "expected_behavior": "这些单位内部统一、分几类还是不同？需要展开内部还是只画单位间关系？",
+      "must_not": "不得从数量推断模板或补造连接"
+    },
+    {
+      "id": "P02",
+      "prompt": "20个站点均由路由器、接入交换机和终端组成，内部连接已给定，需要展开。",
+      "expected_category": "repeated_structure",
+      "expected_behavior": "统一内部模板＋20个实例连接图；先确定实际尺寸和接口。",
+      "must_not": "不要求各实例外部连接对象相同；组合求解尚未自动实现"
+    },
+    {
+      "id": "P03",
+      "prompt": "只画20个单位与总部的已确认连接，不展开内部。",
+      "expected_category": "overview",
+      "expected_behavior": "保留20个实例和明确关系，不询问内部细节。",
+      "must_not": "不做无意义的模板展开"
+    },
+    {
+      "id": "P04",
+      "prompt": "单位分三类，内部配置各类统一；外部接入对象不同。",
+      "expected_category": "multiple_templates",
+      "expected_behavior": "三个模板；具体外部对象保存在实例关系中。",
+      "must_not": "不能因外部对象不同拆成20类"
+    },
+    {
+      "id": "P05",
+      "prompt": "A组与B组关联，具体设备连接未知。",
+      "expected_category": "aggregate_unknown",
+      "expected_behavior": "保留集合关联并标注待确认；需要具体连接才提问。",
+      "must_not": "不展开成两组全连接，不编造端口或链路数"
+    },
+    {
+      "id": "P06",
+      "prompt": "绘制反馈控制机制原理图。",
+      "expected_category": "free_layout",
+      "expected_behavior": "保留因果方向与反馈，节点位置自由，缺省不强制矩阵/等大。",
+      "must_not": "专业电路记法不能因名称相似而套自由示意图"
+    },
+    {
+      "id": "P07",
+      "prompt": "三个服务域依次有6、4、5个服务，相同编号对齐且外框必须等大。",
+      "expected_category": "matrix_contract",
+      "expected_behavior": "按6个共同槽位组织，少的域留空槽位，网关各组使用等长区间。",
+      "must_not": "当前派生容器无共享尺寸模型，不能声称脚本直接支持"
+    },
+    {
+      "id": "P08",
+      "prompt": "两个框宽度不同，两端都取左起1/3，并希望连线竖直。",
+      "expected_category": "geometry_conflict",
+      "expected_behavior": "检查 xA+wA/3=xB+wB/3；允许时移动节点，否则澄清哪个要求可调整。",
+      "must_not": "相同分数不等于绝对坐标对齐"
+    },
+    {
+      "id": "P09",
+      "prompt": "4和5必须横排，接口网关右边四条分派线尽量等分。",
+      "expected_category": "local_concession",
+      "expected_behavior": "保留横排；局部调整源端等分与顶底交替通道，并记录原因。",
+      "must_not": "不得为少转折破坏明确横排"
+    },
+    {
+      "id": "P10",
+      "prompt": "节点位置和两端口均锁定，还必须得到一条无转折直线；当前端口不同高。",
+      "expected_category": "hard_conflict",
+      "expected_behavior": "指出矛盾并询问允许解锁位置、端口还是放宽直连要求。",
+      "must_not": "不擅自把用户锁定降级为偏好"
+    },
+    {
+      "id": "P11",
+      "prompt": "绘制订单审批泳道图。",
+      "expected_category": "typed_capability",
+      "expected_behavior": "识别跨职能泳道图；说明现成泳道后端未验收，整理主体与活动归属，关键缺失再询问。",
+      "must_not": "不能普通流程图加背景框后宣称原生泳道"
+    },
+    {
+      "id": "P12",
+      "prompt": "绘制客户端、API、数据库的时序图，请求与返回顺序已给定。",
+      "expected_category": "typed_capability",
+      "expected_behavior": "按生命线、消息类型和顺序规划；说明专用生成尚未实现。",
+      "must_not": "不能对消息按架构端口均分或推断距离代表实际时长"
+    },
+    {
+      "id": "P13",
+      "prompt": "刚确认过各站点统一结构，现在用户只想改配色。",
+      "expected_category": "inherit_decisions",
+      "expected_behavior": "继承结构/锁定与已有回答，采用配色变更，不重复问内部是否统一。",
+      "must_not": "局部调整不触发全图重排或语义修改"
+    },
+    {
+      "id": "P14",
+      "prompt": "用户未回答结构是否统一，但Agent已发出问题。",
+      "expected_category": "pending",
+      "expected_behavior": "保持关键答案待确认，仅继续不依赖该答案的组织工作。",
+      "must_not": "提问、超时、预选项都不是用户确认"
+    },
+    {
+      "id": "P15",
+      "prompt": "密集图放不下，允许扩大页面，但字号必须保留。",
+      "expected_category": "capacity",
+      "expected_behavior": "优先扩页/重排/拆图，重新检查端口和通道容量。",
+      "must_not": "不缩字或挤线让检查通过"
+    },
+    {
+      "id": "P16",
+      "prompt": "Agent在无人交互宿主中收到单位关系不明确的需求。",
+      "expected_category": "pending_overview",
+      "expected_behavior": "保留未知或标记未定稿总览，记录还需要确认的信息。",
+      "must_not": "不伪称已获用户回复，工具不存在时可用文本交互"
+    }
+  ]
+}

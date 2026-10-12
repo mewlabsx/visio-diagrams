@@ -1,0 +1,475 @@
+{
+  "page": {
+    "width": 18,
+    "height": 13.5,
+    "title": "复杂架构自动排线：18 路共享端口、服务链与反馈回路"
+  },
+  "nodes": [
+    {
+      "id": "system",
+      "kind": "container",
+      "text": "复杂服务平台：自动排线压力样例",
+      "fill": "#F3F6FA"
+    },
+    {
+      "id": "entry",
+      "kind": "container",
+      "text": "入口与管理",
+      "parent": "system",
+      "fill": "#E8F1FA"
+    },
+    {
+      "id": "domain0",
+      "kind": "container",
+      "parent": "system",
+      "text": "服务域 1",
+      "fill": "#EAF4E4"
+    },
+    {
+      "id": "domain1",
+      "kind": "container",
+      "parent": "system",
+      "text": "服务域 2",
+      "fill": "#EAF4E4"
+    },
+    {
+      "id": "domain2",
+      "kind": "container",
+      "parent": "system",
+      "text": "服务域 3",
+      "fill": "#EAF4E4"
+    },
+    {
+      "id": "gateway",
+      "text": "接口网关\n共享端口测试",
+      "x": 1.7,
+      "y": 2.7,
+      "w": 2.5,
+      "h": 8.3,
+      "parent": "entry",
+      "fontSize": 11
+    },
+    {
+      "id": "client",
+      "text": "客户端",
+      "x": 0.1,
+      "y": 6.5,
+      "w": 0.85,
+      "h": 0.8,
+      "fontSize": 11
+    },
+    {
+      "id": "s0_0",
+      "text": "服务 1-1",
+      "x": 6,
+      "y": 2.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s0_1",
+      "text": "服务 1-2",
+      "x": 6,
+      "y": 4.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s0_2",
+      "text": "服务 1-3",
+      "x": 6,
+      "y": 5.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s0_3",
+      "text": "服务 1-4",
+      "x": 6,
+      "y": 7.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s0_4",
+      "text": "服务 1-5",
+      "x": 6,
+      "y": 8.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s0_5",
+      "text": "服务 1-6",
+      "x": 6,
+      "y": 10.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_0",
+      "text": "服务 2-1",
+      "x": 10,
+      "y": 2.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_1",
+      "text": "服务 2-2",
+      "x": 10,
+      "y": 4.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_2",
+      "text": "服务 2-3",
+      "x": 10,
+      "y": 5.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_3",
+      "text": "服务 2-4",
+      "x": 10,
+      "y": 7.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_4",
+      "text": "服务 2-5",
+      "x": 10,
+      "y": 8.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_5",
+      "text": "服务 2-6",
+      "x": 10,
+      "y": 10.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_0",
+      "text": "服务 3-1",
+      "x": 14,
+      "y": 2.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_1",
+      "text": "服务 3-2",
+      "x": 14,
+      "y": 4.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_2",
+      "text": "服务 3-3",
+      "x": 14,
+      "y": 5.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_3",
+      "text": "服务 3-4",
+      "x": 14,
+      "y": 7.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_4",
+      "text": "服务 3-5",
+      "x": 14,
+      "y": 8.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_5",
+      "text": "服务 3-6",
+      "x": 14,
+      "y": 10.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    }
+  ],
+  "edges": [
+    {
+      "from": "client",
+      "to": "gateway",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "gateway",
+      "to": "s0_0",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "gateway",
+      "to": "s0_1",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s0_0",
+      "to": "s0_1",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s0_2",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s0_1",
+      "to": "s0_2",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s0_3",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s0_2",
+      "to": "s0_3",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s0_4",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s0_3",
+      "to": "s0_4",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s0_5",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s0_4",
+      "to": "s0_5",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "s0_5",
+      "to": "gateway",
+      "fromPort": "bottom",
+      "toPort": "bottom"
+    },
+    {
+      "from": "gateway",
+      "to": "s1_0",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "gateway",
+      "to": "s1_1",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s1_0",
+      "to": "s1_1",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s1_2",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s1_1",
+      "to": "s1_2",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s1_3",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s1_2",
+      "to": "s1_3",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s1_4",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s1_3",
+      "to": "s1_4",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s1_5",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s1_4",
+      "to": "s1_5",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "s1_5",
+      "to": "gateway",
+      "fromPort": "bottom",
+      "toPort": "bottom"
+    },
+    {
+      "from": "gateway",
+      "to": "s2_0",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "gateway",
+      "to": "s2_1",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s2_0",
+      "to": "s2_1",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s2_2",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s2_1",
+      "to": "s2_2",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s2_3",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s2_2",
+      "to": "s2_3",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s2_4",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s2_3",
+      "to": "s2_4",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "gateway",
+      "to": "s2_5",
+      "fromPort": "right",
+      "toPort": "left"
+    },
+    {
+      "from": "s2_4",
+      "to": "s2_5",
+      "fromPort": "bottom",
+      "toPort": "top"
+    },
+    {
+      "from": "s2_5",
+      "to": "gateway",
+      "fromPort": "bottom",
+      "toPort": "bottom"
+    }
+  ],
+  "localLayout": {
+    "routing": {
+      "spreadPorts": true,
+      "routeAttempts": 4,
+      "maxStates": 350000,
+      "clearance": 0.12,
+      "channelLanes": 3
+    }
+  }
+}

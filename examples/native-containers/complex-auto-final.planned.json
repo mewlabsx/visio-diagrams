@@ -1,0 +1,1162 @@
+{
+  "page": {
+    "width": 18,
+    "height": 13.5,
+    "title": "复杂架构自动排线：18 路共享端口、服务链与反馈回路"
+  },
+  "nodes": [
+    {
+      "id": "system",
+      "kind": "container",
+      "text": "复杂服务平台：自动排线压力样例",
+      "fill": "#F3F6FA",
+      "x": 1.2,
+      "y": 1.3,
+      "w": 15.3,
+      "h": 10.2,
+      "padding": 0.25,
+      "headerHeight": 0.45
+    },
+    {
+      "id": "entry",
+      "kind": "container",
+      "text": "入口与管理",
+      "parent": "system",
+      "fill": "#E8F1FA",
+      "x": 1.45,
+      "y": 2.0,
+      "w": 3.0,
+      "h": 9.25,
+      "padding": 0.25,
+      "headerHeight": 0.45
+    },
+    {
+      "id": "domain0",
+      "kind": "container",
+      "parent": "system",
+      "text": "服务域 1",
+      "fill": "#EAF4E4",
+      "x": 5.75,
+      "y": 2.0,
+      "w": 2.5,
+      "h": 9.25,
+      "padding": 0.25,
+      "headerHeight": 0.45
+    },
+    {
+      "id": "domain1",
+      "kind": "container",
+      "parent": "system",
+      "text": "服务域 2",
+      "fill": "#EAF4E4",
+      "x": 9.75,
+      "y": 2.0,
+      "w": 2.5,
+      "h": 9.25,
+      "padding": 0.25,
+      "headerHeight": 0.45
+    },
+    {
+      "id": "domain2",
+      "kind": "container",
+      "parent": "system",
+      "text": "服务域 3",
+      "fill": "#EAF4E4",
+      "x": 13.75,
+      "y": 2.0,
+      "w": 2.5,
+      "h": 9.25,
+      "padding": 0.25,
+      "headerHeight": 0.45
+    },
+    {
+      "id": "gateway",
+      "text": "接口网关\n共享端口测试",
+      "x": 1.7,
+      "y": 2.7,
+      "w": 2.5,
+      "h": 8.3,
+      "parent": "entry",
+      "fontSize": 11
+    },
+    {
+      "id": "client",
+      "text": "客户端",
+      "x": 0.1,
+      "y": 6.5,
+      "w": 0.85,
+      "h": 0.8,
+      "fontSize": 11
+    },
+    {
+      "id": "s0_0",
+      "text": "服务 1-1",
+      "x": 6,
+      "y": 2.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s0_1",
+      "text": "服务 1-2",
+      "x": 6,
+      "y": 4.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s0_2",
+      "text": "服务 1-3",
+      "x": 6,
+      "y": 5.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s0_3",
+      "text": "服务 1-4",
+      "x": 6,
+      "y": 7.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s0_4",
+      "text": "服务 1-5",
+      "x": 6,
+      "y": 8.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s0_5",
+      "text": "服务 1-6",
+      "x": 6,
+      "y": 10.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain0",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_0",
+      "text": "服务 2-1",
+      "x": 10,
+      "y": 2.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_1",
+      "text": "服务 2-2",
+      "x": 10,
+      "y": 4.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_2",
+      "text": "服务 2-3",
+      "x": 10,
+      "y": 5.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_3",
+      "text": "服务 2-4",
+      "x": 10,
+      "y": 7.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_4",
+      "text": "服务 2-5",
+      "x": 10,
+      "y": 8.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s1_5",
+      "text": "服务 2-6",
+      "x": 10,
+      "y": 10.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain1",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_0",
+      "text": "服务 3-1",
+      "x": 14,
+      "y": 2.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_1",
+      "text": "服务 3-2",
+      "x": 14,
+      "y": 4.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_2",
+      "text": "服务 3-3",
+      "x": 14,
+      "y": 5.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_3",
+      "text": "服务 3-4",
+      "x": 14,
+      "y": 7.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_4",
+      "text": "服务 3-5",
+      "x": 14,
+      "y": 8.7,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    },
+    {
+      "id": "s2_5",
+      "text": "服务 3-6",
+      "x": 14,
+      "y": 10.2,
+      "w": 2,
+      "h": 0.8,
+      "parent": "domain2",
+      "fontSize": 11
+    }
+  ],
+  "edges": [
+    {
+      "from": "client",
+      "to": "gateway",
+      "fromPort": "right",
+      "toPort": "left",
+      "routePoints": [
+        [
+          0.95,
+          6.9
+        ],
+        [
+          1.0899999999999999,
+          6.9
+        ],
+        [
+          1.0899999999999999,
+          6.8500000000000005
+        ],
+        [
+          1.7,
+          6.8500000000000005
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s0_0",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.014457831325301203,
+      "routePoints": [
+        [
+          4.2,
+          2.8200000000000003
+        ],
+        [
+          5.76,
+          2.8200000000000003
+        ],
+        [
+          5.76,
+          3.1
+        ],
+        [
+          6,
+          3.1
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s0_1",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.1858256555634302,
+      "routePoints": [
+        [
+          4.2,
+          4.24235294117647
+        ],
+        [
+          5.88,
+          4.24235294117647
+        ],
+        [
+          5.88,
+          4.6000000000000005
+        ],
+        [
+          6,
+          4.6000000000000005
+        ]
+      ]
+    },
+    {
+      "from": "s0_0",
+      "to": "s0_1",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          7.0,
+          3.5
+        ],
+        [
+          7.0,
+          4.2
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s0_2",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.3571934798015592,
+      "routePoints": [
+        [
+          4.2,
+          5.6647058823529415
+        ],
+        [
+          5.88,
+          5.6647058823529415
+        ],
+        [
+          5.88,
+          6.1000000000000005
+        ],
+        [
+          6,
+          6.1000000000000005
+        ]
+      ]
+    },
+    {
+      "from": "s0_1",
+      "to": "s0_2",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          7.0,
+          5.0
+        ],
+        [
+          7.0,
+          5.7
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s0_3",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.5285613040396882,
+      "routePoints": [
+        [
+          4.2,
+          7.0870588235294125
+        ],
+        [
+          5.88,
+          7.0870588235294125
+        ],
+        [
+          5.88,
+          7.6000000000000005
+        ],
+        [
+          6,
+          7.6000000000000005
+        ]
+      ]
+    },
+    {
+      "from": "s0_2",
+      "to": "s0_3",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          7.0,
+          6.5
+        ],
+        [
+          7.0,
+          7.2
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s0_4",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.6999291282778171,
+      "routePoints": [
+        [
+          4.2,
+          8.509411764705883
+        ],
+        [
+          5.88,
+          8.509411764705883
+        ],
+        [
+          5.88,
+          9.1
+        ],
+        [
+          6,
+          9.1
+        ]
+      ]
+    },
+    {
+      "from": "s0_3",
+      "to": "s0_4",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          7.0,
+          8.0
+        ],
+        [
+          7.0,
+          8.7
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s0_5",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.8712969525159462,
+      "routePoints": [
+        [
+          4.2,
+          9.931764705882355
+        ],
+        [
+          5.88,
+          9.931764705882355
+        ],
+        [
+          5.88,
+          10.6
+        ],
+        [
+          6,
+          10.6
+        ]
+      ]
+    },
+    {
+      "from": "s0_4",
+      "to": "s0_5",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          7.0,
+          9.5
+        ],
+        [
+          7.0,
+          10.2
+        ]
+      ]
+    },
+    {
+      "from": "s0_5",
+      "to": "gateway",
+      "fromPort": "bottom",
+      "toPort": "bottom",
+      "toFraction": 0.048,
+      "routePoints": [
+        [
+          7.0,
+          11.0
+        ],
+        [
+          7.0,
+          11.12
+        ],
+        [
+          1.8199999999999998,
+          11.12
+        ],
+        [
+          1.8199999999999998,
+          11.0
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s1_0",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.07158043940467752,
+      "routePoints": [
+        [
+          4.2,
+          3.294117647058824
+        ],
+        [
+          5.75,
+          3.294117647058824
+        ],
+        [
+          5.75,
+          3.62
+        ],
+        [
+          9.88,
+          3.62
+        ],
+        [
+          9.88,
+          3.1
+        ],
+        [
+          10,
+          3.1
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s1_1",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.2429482636428065,
+      "routePoints": [
+        [
+          4.2,
+          4.716470588235294
+        ],
+        [
+          5.88,
+          4.716470588235294
+        ],
+        [
+          5.88,
+          5.12
+        ],
+        [
+          9.88,
+          5.12
+        ],
+        [
+          9.88,
+          4.6000000000000005
+        ],
+        [
+          10,
+          4.6000000000000005
+        ]
+      ]
+    },
+    {
+      "from": "s1_0",
+      "to": "s1_1",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          11.0,
+          3.5
+        ],
+        [
+          11.0,
+          4.2
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s1_2",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.4143160878809355,
+      "routePoints": [
+        [
+          4.2,
+          6.138823529411765
+        ],
+        [
+          5.88,
+          6.138823529411765
+        ],
+        [
+          5.88,
+          6.62
+        ],
+        [
+          9.88,
+          6.62
+        ],
+        [
+          9.88,
+          6.1000000000000005
+        ],
+        [
+          10,
+          6.1000000000000005
+        ]
+      ]
+    },
+    {
+      "from": "s1_1",
+      "to": "s1_2",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          11.0,
+          5.0
+        ],
+        [
+          11.0,
+          5.7
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s1_3",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.5856839121190646,
+      "routePoints": [
+        [
+          4.2,
+          7.5611764705882365
+        ],
+        [
+          5.76,
+          7.5611764705882365
+        ],
+        [
+          5.76,
+          7.08
+        ],
+        [
+          9.88,
+          7.08
+        ],
+        [
+          9.88,
+          7.6000000000000005
+        ],
+        [
+          10,
+          7.6000000000000005
+        ]
+      ]
+    },
+    {
+      "from": "s1_2",
+      "to": "s1_3",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          11.0,
+          6.5
+        ],
+        [
+          11.0,
+          7.2
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s1_4",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.7570517363571935,
+      "routePoints": [
+        [
+          4.2,
+          8.983529411764707
+        ],
+        [
+          5.76,
+          8.983529411764707
+        ],
+        [
+          5.76,
+          8.58
+        ],
+        [
+          9.88,
+          8.58
+        ],
+        [
+          9.88,
+          9.1
+        ],
+        [
+          10,
+          9.1
+        ]
+      ]
+    },
+    {
+      "from": "s1_3",
+      "to": "s1_4",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          11.0,
+          8.0
+        ],
+        [
+          11.0,
+          8.7
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s1_5",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.9284195605953224,
+      "routePoints": [
+        [
+          4.2,
+          10.405882352941177
+        ],
+        [
+          5.76,
+          10.405882352941177
+        ],
+        [
+          5.76,
+          10.08
+        ],
+        [
+          9.88,
+          10.08
+        ],
+        [
+          9.88,
+          10.6
+        ],
+        [
+          10,
+          10.6
+        ]
+      ]
+    },
+    {
+      "from": "s1_4",
+      "to": "s1_5",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          11.0,
+          9.5
+        ],
+        [
+          11.0,
+          10.2
+        ]
+      ]
+    },
+    {
+      "from": "s1_5",
+      "to": "gateway",
+      "fromPort": "bottom",
+      "toPort": "bottom",
+      "toFraction": 0.5,
+      "routePoints": [
+        [
+          11.0,
+          11.0
+        ],
+        [
+          11.0,
+          11.24
+        ],
+        [
+          2.95,
+          11.24
+        ],
+        [
+          2.95,
+          11.0
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s2_0",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.12870304748405387,
+      "routePoints": [
+        [
+          4.2,
+          3.7682352941176473
+        ],
+        [
+          13.88,
+          3.7682352941176473
+        ],
+        [
+          13.88,
+          3.1
+        ],
+        [
+          14,
+          3.1
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s2_1",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.3000708717221829,
+      "routePoints": [
+        [
+          4.2,
+          5.190588235294118
+        ],
+        [
+          13.88,
+          5.190588235294118
+        ],
+        [
+          13.88,
+          4.6000000000000005
+        ],
+        [
+          14,
+          4.6000000000000005
+        ]
+      ]
+    },
+    {
+      "from": "s2_0",
+      "to": "s2_1",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          15.0,
+          3.5
+        ],
+        [
+          15.0,
+          4.2
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s2_2",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.4714386959603118,
+      "routePoints": [
+        [
+          4.2,
+          6.6129411764705885
+        ],
+        [
+          5.76,
+          6.6129411764705885
+        ],
+        [
+          5.76,
+          6.74
+        ],
+        [
+          13.88,
+          6.74
+        ],
+        [
+          13.88,
+          6.1000000000000005
+        ],
+        [
+          14,
+          6.1000000000000005
+        ]
+      ]
+    },
+    {
+      "from": "s2_1",
+      "to": "s2_2",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          15.0,
+          5.0
+        ],
+        [
+          15.0,
+          5.7
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s2_3",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.6428065201984409,
+      "routePoints": [
+        [
+          4.2,
+          8.035294117647059
+        ],
+        [
+          5.88,
+          8.035294117647059
+        ],
+        [
+          5.88,
+          8.12
+        ],
+        [
+          13.76,
+          8.12
+        ],
+        [
+          13.76,
+          7.6000000000000005
+        ],
+        [
+          14,
+          7.6000000000000005
+        ]
+      ]
+    },
+    {
+      "from": "s2_2",
+      "to": "s2_3",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          15.0,
+          6.5
+        ],
+        [
+          15.0,
+          7.2
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s2_4",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.8141743444365698,
+      "routePoints": [
+        [
+          4.2,
+          9.457647058823529
+        ],
+        [
+          5.88,
+          9.457647058823529
+        ],
+        [
+          5.88,
+          9.62
+        ],
+        [
+          13.88,
+          9.62
+        ],
+        [
+          13.88,
+          9.1
+        ],
+        [
+          14,
+          9.1
+        ]
+      ]
+    },
+    {
+      "from": "s2_3",
+      "to": "s2_4",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          15.0,
+          8.0
+        ],
+        [
+          15.0,
+          8.7
+        ]
+      ]
+    },
+    {
+      "from": "gateway",
+      "to": "s2_5",
+      "fromPort": "right",
+      "toPort": "left",
+      "fromFraction": 0.9855421686746987,
+      "routePoints": [
+        [
+          4.2,
+          10.879999999999999
+        ],
+        [
+          5.88,
+          10.879999999999999
+        ],
+        [
+          5.88,
+          11.36
+        ],
+        [
+          13.88,
+          11.36
+        ],
+        [
+          13.88,
+          10.6
+        ],
+        [
+          14,
+          10.6
+        ]
+      ]
+    },
+    {
+      "from": "s2_4",
+      "to": "s2_5",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "routePoints": [
+        [
+          15.0,
+          9.5
+        ],
+        [
+          15.0,
+          10.2
+        ]
+      ]
+    },
+    {
+      "from": "s2_5",
+      "to": "gateway",
+      "fromPort": "bottom",
+      "toPort": "bottom",
+      "toFraction": 0.952,
+      "routePoints": [
+        [
+          15.0,
+          11.0
+        ],
+        [
+          15.0,
+          13.25
+        ],
+        [
+          4.08,
+          13.25
+        ],
+        [
+          4.08,
+          11.0
+        ]
+      ]
+    }
+  ],
+  "_routingValidation": {
+    "plannedEdges": 37,
+    "overlaps": 0,
+    "crossings": 24,
+    "searchStates": 111358,
+    "totalBends": 64,
+    "labelsPlaced": 0,
+    "scope": "All local routes and label rectangles checked; crossings penalized; visual QA still required",
+    "attemptsTried": 4,
+    "successfulSearchStates": 443179,
+    "attemptFailures": []
+  },
+  "_localLayout": {
+    "moves": [],
+    "initialBends": 64,
+    "status": "PASS",
+    "totalBends": 64
+  },
+  "_planningReuse": "Verified automatic routes reused unchanged after adding resize-relative text formulas"
+}

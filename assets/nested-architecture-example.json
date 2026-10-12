@@ -1,0 +1,188 @@
+{
+  "page": {
+    "width": 18,
+    "height": 11,
+    "title": "原生三层嵌套容器与复杂架构自动排线"
+  },
+  "nodes": [
+    {
+      "id": "root",
+      "kind": "container",
+      "text": "测试平台",
+      "fill": "#F3F6FA"
+    },
+    {
+      "id": "control",
+      "kind": "container",
+      "text": "管理层",
+      "parent": "root",
+      "fill": "#E8F1FA"
+    },
+    {
+      "id": "worker",
+      "kind": "container",
+      "text": "执行层",
+      "parent": "root",
+      "fill": "#EAF4E4"
+    },
+    {
+      "id": "services",
+      "kind": "container",
+      "text": "服务分组",
+      "parent": "worker",
+      "fill": "#FFF4DE"
+    },
+    {
+      "id": "client",
+      "text": "客户端",
+      "x": 0.5,
+      "y": 3,
+      "w": 1.5,
+      "h": 0.8,
+      "fontSize": 11
+    },
+    {
+      "id": "api",
+      "text": "管理 API",
+      "x": 3.7,
+      "y": 2.5,
+      "w": 2.4,
+      "h": 3.2,
+      "fontSize": 11,
+      "parent": "control"
+    },
+    {
+      "id": "controller",
+      "text": "协调器",
+      "x": 3.7,
+      "y": 6.6,
+      "w": 2.4,
+      "h": 1,
+      "fontSize": 11,
+      "parent": "control"
+    },
+    {
+      "id": "agent",
+      "text": "执行代理",
+      "x": 8.4,
+      "y": 2.5,
+      "w": 2.4,
+      "h": 1,
+      "fontSize": 11,
+      "parent": "worker"
+    },
+    {
+      "id": "runtime",
+      "text": "执行引擎",
+      "x": 12.3,
+      "y": 2.5,
+      "w": 2.4,
+      "h": 1,
+      "fontSize": 11,
+      "parent": "worker"
+    },
+    {
+      "id": "a",
+      "text": "服务 A",
+      "x": 8.4,
+      "y": 5.2,
+      "w": 2.4,
+      "h": 0.8,
+      "fontSize": 11,
+      "parent": "services"
+    },
+    {
+      "id": "b",
+      "text": "服务 B",
+      "x": 12.3,
+      "y": 5.2,
+      "w": 2.4,
+      "h": 0.8,
+      "fontSize": 11,
+      "parent": "services"
+    },
+    {
+      "id": "c",
+      "text": "服务 C",
+      "x": 10.35,
+      "y": 7.0,
+      "w": 2.4,
+      "h": 0.8,
+      "fontSize": 11,
+      "parent": "services"
+    }
+  ],
+  "edges": [
+    {
+      "from": "client",
+      "to": "api",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "请求"
+    },
+    {
+      "from": "controller",
+      "to": "api",
+      "fromPort": "top",
+      "toPort": "bottom",
+      "text": "协调"
+    },
+    {
+      "from": "api",
+      "to": "agent",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "分派"
+    },
+    {
+      "from": "api",
+      "to": "runtime",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "分派"
+    },
+    {
+      "from": "api",
+      "to": "a",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "分派"
+    },
+    {
+      "from": "api",
+      "to": "b",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "分派"
+    },
+    {
+      "from": "agent",
+      "to": "runtime",
+      "fromPort": "right",
+      "toPort": "left",
+      "text": "调用"
+    },
+    {
+      "from": "runtime",
+      "to": "c",
+      "fromPort": "bottom",
+      "toPort": "right",
+      "text": "执行"
+    },
+    {
+      "from": "c",
+      "to": "api",
+      "fromPort": "left",
+      "toPort": "bottom",
+      "text": "反馈"
+    }
+  ],
+  "localLayout": {
+    "routing": {
+      "spreadPorts": true,
+      "routeAttempts": 4,
+      "maxStates": 400000,
+      "clearance": 0.12
+    }
+  }
+}
